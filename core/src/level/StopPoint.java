@@ -20,6 +20,11 @@ public class StopPoint {
         this.startCreatures = startCreatures;
         this.stopPointPositionX = stopPointPositionX;
         this.creaturesType = creaturesType;
+        createStopPoint();
+    }
+
+    private void createStopPoint() {
+
     }
 
     public float getStopPointPositionX() {

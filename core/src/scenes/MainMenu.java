@@ -9,24 +9,27 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameMain;
 import gameInfo.GameInfo;
+import huds.MainMenuHuds;
 
 public class MainMenu implements Screen {
 
     private GameMain game;
-    private OrthographicCamera mainCamera;
     private Viewport gameViewport;
     private Texture bg;
-
+    private MainMenuHuds huds;
 
     public MainMenu(GameMain game) {
         this.game = game;
+        OrthographicCamera mainCamera;
 
         mainCamera = new OrthographicCamera(GameInfo.WIDTH,GameInfo.HEIGHT);
         mainCamera.position.set(GameInfo.WIDTH/2f,GameInfo.HEIGHT/2f,0);
 
         gameViewport = new StretchViewport(GameInfo.WIDTH,GameInfo.HEIGHT,mainCamera);
 
-        bg = new Texture(GameInfo.ASSETS_PREFIX_URL +"\\background\\bgMainMenu.png");
+        bg = new Texture(GameInfo.ASSETS_PREFIX_URL +"\\background\\bgMainMenu2.png");
+
+        huds = new MainMenuHuds(game);
     }
 
 
@@ -46,7 +49,8 @@ public class MainMenu implements Screen {
         game.getBatch().draw(bg, 0,0 );
         game.getBatch().end();
 
-        game.getBatch().setProjectionMatrix(mainCamera.combined);
+        game.getBatch().setProjectionMatrix(huds.getStage().getCamera().combined);
+        huds.getStage().draw();
 
     }
 
