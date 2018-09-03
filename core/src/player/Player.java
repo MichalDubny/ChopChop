@@ -105,16 +105,16 @@ public class Player extends Sprite {
         }
     }
 
-    private void drawAnimation(SpriteBatch batch, TextureAtlas playerAtlasIdle, float v) {
+    private void drawAnimation(SpriteBatch batch, TextureAtlas textureAtlas, float v) {
         float frameDuration = 1f / v;
         elapsedTime += Gdx.graphics.getDeltaTime();
-        Array<TextureAtlas.AtlasRegion> frames = playerAtlasIdle.getRegions();
+        Array<TextureAtlas.AtlasRegion> frames = textureAtlas.getRegions();
 
         for (TextureRegion frame : frames) {
             setFlipSide(body.getLinearVelocity().x, frame);
         }
 
-        Animation<TextureAtlas.AtlasRegion> animation = new Animation<TextureAtlas.AtlasRegion>(frameDuration, playerAtlasIdle.getRegions());
+        Animation<TextureAtlas.AtlasRegion> animation = new Animation<TextureAtlas.AtlasRegion>(frameDuration, textureAtlas.getRegions());
         batch.draw(animation.getKeyFrame(elapsedTime, true),
                 getX() - this.getWidth() / 2f +10, getY() - (getHeight() / 2f -10)  );
     }

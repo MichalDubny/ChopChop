@@ -47,11 +47,11 @@ public class MainMenu implements Screen {
 
         game.getBatch().begin();
         game.getBatch().draw(bg, 0,0 );
+        huds.drawSignAnimation(game.getBatch());
         game.getBatch().end();
 
         game.getBatch().setProjectionMatrix(huds.getStage().getCamera().combined);
         huds.getStage().draw();
-
     }
 
 
