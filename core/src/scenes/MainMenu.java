@@ -78,5 +78,6 @@ public class MainMenu implements Screen {
     @Override
     public void dispose() {
         bg.dispose();
+        huds.getStage().dispose();
     }
 }

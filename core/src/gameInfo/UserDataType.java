@@ -2,5 +2,6 @@ package gameInfo;
 
 public enum UserDataType {
     GROUND,
-    PLAYER
+    PLAYER,
+    STOP_POINT
 }

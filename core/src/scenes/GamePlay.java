@@ -13,11 +13,15 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameMain;
+import creatures.CreaturesController;
 import gameInfo.UserDataType;
 import ground.Ground;
 import ground.GroundController;
 import gameInfo.GameInfo;
+import level.Level1;
 import player.Player;
+
+import java.util.logging.Level;
 
 public class GamePlay implements Screen,ContactListener {
     private GameMain game;
@@ -33,16 +37,38 @@ public class GamePlay implements Screen,ContactListener {
     private Box2DDebugRenderer debugRenderer;
 
     private World world;
+    private Level1 level;
     private Background background;
     private StartBorder startBorder;
     private EndBorder endBorder;
     private GroundController groundController;
     private Player player;
+    private CreaturesController creaturesController;
 
 
     public GamePlay(GameMain game) {
         this.game = game;
+        createDefaultBody();
 
+        level = new Level1(world);
+
+        groundController = new GroundController(world);
+        background = new Background(world);
+
+        startBorder = new StartBorder(world);
+        endBorder = new EndBorder(world);
+
+
+        player = new Player(world, groundController.getWidthGround());
+
+        creaturesController = new CreaturesController(world,level.getStopPointArrayData());
+
+    }
+
+    /**
+     * nastavenia ohladom pozicii kamery, debugeru a svetu
+     */
+    private void createDefaultBody() {
         mainCamera = new OrthographicCamera(GameInfo.WIDTH,GameInfo.HEIGHT);
         mainCamera.position.set(GameInfo.WIDTH/2f,GameInfo.HEIGHT/2f,0);
         minCameraXPosition = mainCamera.position.x;
@@ -57,17 +83,7 @@ public class GamePlay implements Screen,ContactListener {
         debugRenderer = new Box2DDebugRenderer();
         world = new World(new Vector2(0,-9.8f),true);
         world.setContactListener(this);
-
-        groundController = new GroundController(world);
-        background = new Background(world);
-
-        startBorder = new StartBorder(world);
-        endBorder = new EndBorder(world);
-
-        player = new Player(world, groundController.getWidthGround());
-
     }
-
 
 
     @Override
@@ -75,6 +91,9 @@ public class GamePlay implements Screen,ContactListener {
 
     }
 
+    /**
+     * vstupy z klavesnice
+     */
     private void handleInput(){
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             player.movePlayer(player.getPlayerUserData().getLeftMovingLinearImpulse());
@@ -108,6 +127,7 @@ public class GamePlay implements Screen,ContactListener {
         background.drawBackground(game.getBatch(), cameraPosition);
         groundController.drawGrounds(game.getBatch());
         player.drawPlayerAnimation(game.getBatch());
+        creaturesController.drawCreatures(game.getBatch());
 
         game.getBatch().end();
 
@@ -162,19 +182,27 @@ public class GamePlay implements Screen,ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        Object a = contact.getFixtureA().getUserData();
-        Object b = contact.getFixtureB().getUserData();
+        Fixture a = contact.getFixtureA();
+        Fixture b = contact.getFixtureB();
 
         if ((bodyIsInputName(a,UserDataType.PLAYER) && bodyIsInputName(b,UserDataType.GROUND)) ||
                 (bodyIsInputName(a,UserDataType.GROUND) && bodyIsInputName(b,UserDataType.PLAYER))) {
             player.landed();
         }
 
+        if (bodyIsInputName(a,UserDataType.PLAYER) && bodyIsInputName(b,UserDataType.STOP_POINT)){
+            b.setUserData("turnOn");
+            level.turnOnStopPoint();
+
+        }else if(bodyIsInputName(a,UserDataType.STOP_POINT) && bodyIsInputName(b,UserDataType.PLAYER)) {
+            a.setUserData("turnOn");
+            level.turnOnStopPoint();
+        }
     }
 
 
-    private boolean bodyIsInputName(Object userData,Enum userDataType) {
-        return userData != null && userData == userDataType;
+    private boolean bodyIsInputName(Fixture userData,Enum userDataType) {
+        return userData.getUserData() != null && userData.getUserData() == userDataType;
     }
 
 

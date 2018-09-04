@@ -1,12 +1,8 @@
 package border;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 import gameInfo.GameInfo;
-import gameInfo.UserDataType;
-
 public class StartBorder extends Sprite {
     private World world;
     private Body body;

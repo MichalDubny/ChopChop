@@ -12,7 +12,7 @@ import gameInfo.UserDataType;
 public class Player extends Sprite {
     private World world;
     private Body body;
-    private PlayerUserData playerUserData;
+    private PlayerData playerUserData;
     private TextureAtlas playerAtlasWalk;
     private TextureAtlas playerAtlasIdle;
     private TextureAtlas playerAtlasJump;
@@ -29,7 +29,7 @@ public class Player extends Sprite {
         playerAtlasWalk = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\walk\\PlayerAnimationWalk.atlas");
         playerAtlasIdle = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\idle\\PlayerAnimationIdle.atlas");
         playerAtlasJump = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\jump\\PlayerAnimationJump.atlas");
-        playerUserData = new PlayerUserData();
+        playerUserData = new PlayerData();
     }
 
     private void createBody() {
@@ -48,6 +48,8 @@ public class Player extends Sprite {
         fixtureDef.density = 70f;
         fixtureDef.friction = 2f;
         fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = GameInfo.PLAYER;
+        fixtureDef.filter.maskBits = GameInfo.DEFAULT;
 
         Fixture fixture = body.createFixture(fixtureDef);
         fixture.setUserData(UserDataType.PLAYER);
@@ -153,7 +155,7 @@ public class Player extends Sprite {
         isJumping = false;
     }
 
-    public PlayerUserData getPlayerUserData() {
+    public PlayerData getPlayerUserData() {
         return playerUserData;
     }
 }

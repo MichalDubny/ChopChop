@@ -9,19 +9,22 @@ import gameInfo.GameInfo;
 
 import java.util.ArrayList;
 
-public class Creatures extends Sprite {
+public class Creature extends Sprite {
     private World world;
     private Body body;
     String name;
+    Vector2 vector2;
+
     private ArrayList<TextureAtlas> arrayAnimations;
 
-    public Creatures() {
+    public Creature() {
     }
 
-    public Creatures(World world, String name, Vector2 vector2) {
+    public Creature(World world, String name, Vector2 vector2) {
         super(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\creatures\\" + name + "\\" + name + ".png"));
         this.name = name;
         this.world = world;
+        this.vector2 = vector2;
         setPosition(vector2.x,vector2.y);
         createBody();
     }
@@ -29,17 +32,18 @@ public class Creatures extends Sprite {
     private void createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+
         bodyDef.position.set(getX()/GameInfo.PPM,getY()/GameInfo.PPM );
 
         body = world.createBody(bodyDef);
         body.setFixedRotation(true);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox((getWidth()  / 4f -15)/GameInfo.PPM ,(getHeight() / 2f -10)/GameInfo.PPM );
+        shape.setAsBox((getWidth()  / 2f )/GameInfo.PPM ,(getHeight() / 2f )/GameInfo.PPM );
 
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 70f;
+        fixtureDef.density = 4f;
         fixtureDef.friction = 2f;
         fixtureDef.shape = shape;
 
@@ -58,4 +62,13 @@ public class Creatures extends Sprite {
     public ArrayList<TextureAtlas> getArrayAnimations() {
         return arrayAnimations;
     }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
 }

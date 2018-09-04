@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import gameInfo.UserData;
 import gameInfo.UserDataType;
 
-public class PlayerUserData extends UserData{
+public class PlayerData extends UserData{
 
 
     private final Vector2 jumpingLinearImpulse;
@@ -15,12 +15,12 @@ public class PlayerUserData extends UserData{
      */
     private float maxVelocity = 2f;
 
-    public PlayerUserData(){
+    public PlayerData(){
         super();
         jumpingLinearImpulse = new Vector2(0, 20f );
         rightMovingLinearImpulse = new Vector2(2.05f, 0 );
         leftMovingLinearImpulse = new Vector2(-2.05f, 0 );
-        userDataType = UserDataType.PLAYER;
+        dataType = UserDataType.PLAYER;
     }
 
     public Vector2 getJumpingLinearImpulse() {

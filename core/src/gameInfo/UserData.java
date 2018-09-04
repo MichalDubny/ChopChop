@@ -1,12 +1,12 @@
 package gameInfo;
 
 public abstract class UserData {
-    protected UserDataType userDataType;
+    protected UserDataType dataType;
 
     public UserData() {
     }
 
-    public UserDataType getUserDataType() {
-        return userDataType;
+    public UserDataType getDataType() {
+        return dataType;
     }
 }

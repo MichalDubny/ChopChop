@@ -57,13 +57,14 @@ public class MainMenuHuds {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new GamePlay(game));
+                stage.dispose();
             }
         });
         startGameLabel.addListener(new FocusListener(){
             @Override
             public boolean handle(Event event) {
                 if (event.toString().equals("mouseMoved") && menuPosition != "startGame") {
-                    sign.setPosition(positionMenuX - 20,GameInfo.HEIGHT/2f + 4); 
+                    sign.setPosition(positionMenuX - 20,GameInfo.HEIGHT/2f + 4);
                     menuPosition = "startGame";
                     return false;
                 }
@@ -83,7 +84,6 @@ public class MainMenuHuds {
                     sign.setPosition(positionMenuX - 20,GameInfo.HEIGHT/2f -10);
                     return false;
                 }
-
                 return true;
             }
         });
@@ -126,15 +126,11 @@ public class MainMenuHuds {
     }
 
     private void createPositionUIElements() {
-        setFontAndColor();
-        gameNameLabel = new Label( "Chop Chop",new Label.LabelStyle(gameNameFont,orangeColor)) ;
-        startGameLabel = new Label( "Start Game",new Label.LabelStyle(gameNameMenu,orangeColor));
-        optionsLabel = new Label( "Options",new Label.LabelStyle(gameNameMenu,orangeColor));
-        creditsLabel = new Label( "Credits",new Label.LabelStyle(gameNameMenu,orangeColor));
-        quitLabel = new Label( "Quit",new Label.LabelStyle(gameNameMenu,orangeColor));
+        setUIElements();
+        setPositionUIElements();
+    }
 
-        sign = new Sprite(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\huds\\sign\\sign1.png"));
-
+    private void setPositionUIElements() {
         positionMenuX = GameInfo.WIDTH/2f - 40;
 
         gameNameLabel.setPosition(GameInfo.WIDTH/2f,GameInfo.HEIGHT - 20,Align.top);
@@ -144,15 +140,28 @@ public class MainMenuHuds {
         quitLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 30,Align.left);
 
         sign.setPosition(positionMenuX - 20,GameInfo.HEIGHT/2f + 4);
+    }
 
+    private void setUIElements() {
+        setFontAndColor();
+
+        gameNameLabel = new Label( "Chop Chop",new Label.LabelStyle(gameNameFont,orangeColor)) ;
+        startGameLabel = new Label( "Start Game",new Label.LabelStyle(gameNameMenu,orangeColor));
+        optionsLabel = new Label( "Options",new Label.LabelStyle(gameNameMenu,orangeColor));
+        creditsLabel = new Label( "Credits",new Label.LabelStyle(gameNameMenu,orangeColor));
+        quitLabel = new Label( "Quit",new Label.LabelStyle(gameNameMenu,orangeColor));
+
+        sign = new Sprite(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\huds\\sign\\sign1.png"));
     }
 
     private void setFontAndColor() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
                 Gdx.files.internal(GameInfo.ASSETS_PREFIX_URL +"\\font\\IMMORTAL.ttf"));
+
         FreeTypeFontGenerator.FreeTypeFontParameter parameterGameName = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameterGameName.size = 30;
         FreeTypeFontGenerator.FreeTypeFontParameter parameterMenu = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        parameterGameName.size = 30;
         parameterMenu.size = 15;
 
         gameNameFont = generator.generateFont(parameterGameName);
