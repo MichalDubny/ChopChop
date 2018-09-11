@@ -27,10 +27,12 @@ public class GroundController {
 
     private void positionGrounds(){
         int i = 0;
-        for(Ground ground : ground){
-            ground.setSpritePosition(i* ground.getWidth()+ ground.getWidth()/2,0);
-            i++;
-        }
+        ground.get(0).setSpritePosition(0,0);
+//        for(Ground ground : ground){
+//             ground.setSpritePosition(i* ground.getWidth()+ ground.getWidth()/2,0);
+//             i++;
+//        }
+        // TODO nahradi map generatorm
     }
 
     public float getWidthGround(){

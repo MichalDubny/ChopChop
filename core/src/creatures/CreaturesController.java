@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import level.StopPoint;
+import player.Player;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -14,12 +15,13 @@ public class CreaturesController {
     World world;
     Array<Creature> creatures;
     ArrayList<StopPoint> stopPointArrayData;
+    Player player;
 
 
-
-    public CreaturesController(World world,ArrayList<StopPoint> stopPointArrayData) {
+    public CreaturesController(World world, ArrayList<StopPoint> stopPointArrayData, Player player) {
         this.world = world;
         this.stopPointArrayData = stopPointArrayData;
+        this.player = player;
         creatures = new Array<Creature>();
         generateStartingCreatures();
 
@@ -39,9 +41,10 @@ public class CreaturesController {
             Vector2 spawnPoint = stopPointData.getRandomSpawnPoint();
             String creatureTypeName = stopPointData.getRandomCreatureType();
             try {
-                Constructor c = Class.forName("creatures.type." + creatureTypeName).getConstructor(World.class, Vector2.class);
-                Creature creature = (Creature) c.newInstance(world, spawnPoint);
+                Constructor c = Class.forName("creatures.type." + creatureTypeName).getConstructor(World.class, Vector2.class, Player.class);
+                Creature creature = (Creature) c.newInstance(world, spawnPoint, player);
                 System.out.println(creatureTypeName);
+
                 creatures.add(creature);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -58,13 +61,15 @@ public class CreaturesController {
         }
     }
 
-    public void drawCreatures(SpriteBatch batch) {
+
+
+
+    public void update(SpriteBatch batch) {
         for (Creature creature: creatures){
-//            float xxx = creature.getX() ;
-//            float yy = creature.getY() ;
-//            float x = creature.getX() - creature.getWidth() / 2f;
-//            float y = creature.getY() - (creature.getHeight() / 2f);
-            batch.draw(creature, creature.getX() - creature.getWidth() / 2f,creature.getY() - (creature.getHeight() / 2f));
+            creature.update();
+
+            creature.drawAnimation(batch,creature.getArrayAnimations(),creature.getSteeringEntity().getPosition(),5f);
+//            creature.getSteeringEntity().draw(batch);
         }
     }
 }

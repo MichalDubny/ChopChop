@@ -21,7 +21,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "chopChop2"
+        appName = "chopchop4"
         gdxVersion = '1.9.8'
         roboVMVersion = '2.3.3'
         box2DLightsVersion = '1.4'
@@ -48,6 +48,7 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         
     }
 }
@@ -59,7 +60,9 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         
     }
 }

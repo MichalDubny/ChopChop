@@ -1,0 +1,48 @@
+
+PlayerAnimationWalk.png
+size: 64,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+adventurer-run3-00
+  rotate: false
+  xy: 2, 197
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: -1
+adventurer-run3-01
+  rotate: false
+  xy: 2, 158
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: -1
+adventurer-run3-02
+  rotate: false
+  xy: 2, 119
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: -1
+adventurer-run3-03
+  rotate: false
+  xy: 2, 80
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: -1
+adventurer-run3-04
+  rotate: false
+  xy: 2, 41
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: -1
+adventurer-run3-05
+  rotate: false
+  xy: 2, 2
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: -1

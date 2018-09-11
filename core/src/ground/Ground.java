@@ -31,7 +31,8 @@ public class Ground extends Sprite {
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(((getWidth())/2)/GameInfo.PPM, ((getHeight())/2)/GameInfo.PPM);
+//        shape.setAsBox(((getWidth())/2)/GameInfo.PPM, ((getHeight())/2)/GameInfo.PPM);
+        shape.setAsBox(((getWidth()*GameInfo.REPEAT_BG)/2), (GameInfo.pixelsToMeters((int)((getHeight())/2))));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 74f;

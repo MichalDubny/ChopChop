@@ -53,6 +53,7 @@ public class StopPoint extends Sprite {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.filter.categoryBits = GameInfo.STOP_POINT;
+        fixtureDef.filter.maskBits = GameInfo.PLAYER;
         fixtureDef.shape = polygonShape;
 
         fixture = body.createFixture(fixtureDef);

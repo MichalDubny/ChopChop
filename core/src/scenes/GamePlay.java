@@ -58,10 +58,9 @@ public class GamePlay implements Screen,ContactListener {
         startBorder = new StartBorder(world);
         endBorder = new EndBorder(world);
 
-
         player = new Player(world, groundController.getWidthGround());
 
-        creaturesController = new CreaturesController(world,level.getStopPointArrayData());
+        creaturesController = new CreaturesController(world,level.getStopPointArrayData(), player);
 
     }
 
@@ -111,8 +110,6 @@ public class GamePlay implements Screen,ContactListener {
             player.setWalking(false);
         }
 
-
-
     }
 
     @Override
@@ -127,7 +124,7 @@ public class GamePlay implements Screen,ContactListener {
         background.drawBackground(game.getBatch(), cameraPosition);
         groundController.drawGrounds(game.getBatch());
         player.drawPlayerAnimation(game.getBatch());
-        creaturesController.drawCreatures(game.getBatch());
+        creaturesController.update(game.getBatch());
 
         game.getBatch().end();
 

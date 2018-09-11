@@ -1,5 +1,6 @@
 package player;
 
+import creatures.aiArrive.Box2dSteeringEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -17,12 +18,16 @@ public class Player extends Sprite {
     private TextureAtlas playerAtlasIdle;
     private TextureAtlas playerAtlasJump;
     private float elapsedTime;
+    private TextureRegion textureRegion;
+    private Box2dSteeringEntity steeringEntity;
 
     private boolean isJumping;
     private boolean isWalking;
 
     public Player(World world, float widthFloor) {
-        super(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\player\\hero-idle.gif"));
+        super(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\player\\hero.png"));
+        textureRegion = new TextureRegion(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\player\\hero.png"));
+
         this.world = world;
         setPosition((getWidth() /2f),((getY()+getHeight()/2f)+200));
         createBody();
@@ -41,7 +46,7 @@ public class Player extends Sprite {
         body.setFixedRotation(true);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox((getWidth()  / 4f -15)/GameInfo.PPM ,(getHeight() / 2f -10)/GameInfo.PPM );
+        shape.setAsBox((getWidth()  / 4f  )/GameInfo.PPM ,(getHeight() / 2f )/GameInfo.PPM );
 
 
         FixtureDef fixtureDef = new FixtureDef();
@@ -49,12 +54,14 @@ public class Player extends Sprite {
         fixtureDef.friction = 2f;
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = GameInfo.PLAYER;
-        fixtureDef.filter.maskBits = GameInfo.DEFAULT;
+        fixtureDef.filter.maskBits = GameInfo.DEFAULT ;
 
         Fixture fixture = body.createFixture(fixtureDef);
         fixture.setUserData(UserDataType.PLAYER);
 
         shape.dispose();
+
+        steeringEntity = new  Box2dSteeringEntity(textureRegion, body,false, GameInfo.pixelsToMeters((int) getWidth()*2));
     }
 
     public void movePlayer(Vector2 movingLinearImpulse ){
@@ -117,9 +124,15 @@ public class Player extends Sprite {
         }
 
         Animation<TextureAtlas.AtlasRegion> animation = new Animation<TextureAtlas.AtlasRegion>(frameDuration, textureAtlas.getRegions());
+//        batch.draw(animation.getKeyFrame(elapsedTime, true),
+//                getX() - this.getWidth() / 2f +10, getY() - (getHeight() / 2f -10)  );
         batch.draw(animation.getKeyFrame(elapsedTime, true),
-                getX() - this.getWidth() / 2f +10, getY() - (getHeight() / 2f -10)  );
+                GameInfo.metersToPixels(body.getPosition().x)-20 - this.getWidth() / 2f ,
+                GameInfo.metersToPixels(body.getPosition().y) - (getHeight() / 2f )  );
     }
+
+
+
 
     private void setFlipSide(float x, TextureRegion player) {
         if (x < 0 && !player.isFlipX()) {
@@ -157,5 +170,9 @@ public class Player extends Sprite {
 
     public PlayerData getPlayerUserData() {
         return playerUserData;
+    }
+
+    public Box2dSteeringEntity getSteeringEntity() {
+        return steeringEntity;
     }
 }
