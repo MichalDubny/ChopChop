@@ -42,8 +42,8 @@ public class AIArrive {
     }
 
     private void startFollower() {
-        character.setMaxLinearSpeed(8);  //9
-        character.setMaxLinearAcceleration(9);
+        character.setMaxLinearSpeed(7);  //7
+        character.setMaxLinearAcceleration(8);  //8
     }
 
     private void stopFollower() {

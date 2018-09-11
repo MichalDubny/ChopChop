@@ -1,0 +1,62 @@
+
+SkeletonAnimationWalk.png
+size: 512,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+skeleton-1
+  rotate: false
+  xy: 2, 2
+  size: 44, 52
+  orig: 44, 52
+  offset: 0, 0
+  index: -1
+skeleton-2
+  rotate: false
+  xy: 48, 2
+  size: 44, 52
+  orig: 44, 52
+  offset: 0, 0
+  index: -1
+skeleton-3
+  rotate: false
+  xy: 94, 2
+  size: 44, 52
+  orig: 44, 52
+  offset: 0, 0
+  index: -1
+skeleton-4
+  rotate: false
+  xy: 140, 2
+  size: 44, 52
+  orig: 44, 52
+  offset: 0, 0
+  index: -1
+skeleton-5
+  rotate: false
+  xy: 186, 2
+  size: 44, 52
+  orig: 44, 52
+  offset: 0, 0
+  index: -1
+skeleton-6
+  rotate: false
+  xy: 232, 2
+  size: 44, 52
+  orig: 44, 52
+  offset: 0, 0
+  index: -1
+skeleton-7
+  rotate: false
+  xy: 278, 2
+  size: 44, 52
+  orig: 44, 52
+  offset: 0, 0
+  index: -1
+skeleton-8
+  rotate: false
+  xy: 324, 2
+  size: 44, 52
+  orig: 44, 52
+  offset: 0, 0
+  index: -1
