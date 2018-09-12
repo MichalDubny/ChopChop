@@ -1,4 +1,4 @@
-package ground;
+package scenes.ground;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;

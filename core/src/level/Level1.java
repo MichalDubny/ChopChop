@@ -15,7 +15,7 @@ public class Level1 {
     public Level1(World world) {
         stopPointArrayData = new ArrayList<StopPoint>();
         creaturesTypePoint1 = new Array<String>();
-        creaturesTypePoint1.add("Skeleton");
+//        creaturesTypePoint1.add("Skeleton");
         creaturesTypePoint1.add("Ghost");
         StopPoint stopPoint1 = new StopPoint(world,30,5,1,
                 new Vector2(384,0), creaturesTypePoint1);

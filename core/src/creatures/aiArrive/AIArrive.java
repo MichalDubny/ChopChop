@@ -8,7 +8,11 @@ import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.ai.steer.behaviors.PrioritySteering;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import combat.Combat;
 import creatures.CreatureActivity;
+import utils.CountDown;
+
+import java.util.Random;
 
 public class AIArrive {
     private InputProcessor inputProcessor;
@@ -18,6 +22,11 @@ public class AIArrive {
     private Arrive<Vector2> arriveSB;
     private float arriveDistance;
     private CreatureActivity creatureActivity;
+    private boolean isRest;
+    private boolean preparingToAttack = false;
+    private boolean attacking = false;
+    private CountDown preparingToAttackCountDown;
+    private CountDown attackingCountDown;
 
 
     public AIArrive(World world, Box2dSteeringEntity follower, Box2dSteeringEntity target) {
@@ -67,18 +76,58 @@ public class AIArrive {
         // Update box2d world
         world.step(deltaTime, 8, 3);
 
-        arriveDistance = getDistance(target.getPosition(),character.getPosition());
-//        System.out.println(arriveDistance);
-        if(arriveDistance <= 0.8f){
-            stopFollower();
-            creatureActivity = CreatureActivity.IDLE;
-//            TODO attack action
-        }else{
-            creatureActivity = CreatureActivity.WALK;
-            startFollower();
-        }
+        setBehavior(deltaTime);
 
         character.update(GdxAI.getTimepiece().getDeltaTime());
+    }
+
+    private void setBehavior(float deltaTime) {
+//TODO prerobit aby rozna potvori maly rozne parametre min/max dosah  rychlost utoku
+        arriveDistance = getDistance(target.getPosition(),character.getPosition());
+        if(!preparingToAttack) {
+            setRest();
+            if (arriveDistance <= 0.3f) {  //.8
+                stopFollower();
+                creatureActivity = CreatureActivity.IDLE;
+                preparingToAttack = true;
+                preparingToAttackCountDown = new CountDown(200);
+            } else if (isRest) {
+        //          aby jednoty nesli stale rovnakou rychlostou a nenakopili na jednu hromadu
+                stopFollower();
+                System.out.println("rest");
+//                creatureActivity = CreatureActivity.IDLE;
+           } else if (arriveDistance >= 5f) {
+        //            max dosah v tomto dosahu uz neprenasleduje nepriatela
+                stopFollower();
+                creatureActivity = CreatureActivity.IDLE;
+           } else {
+                creatureActivity = CreatureActivity.WALK;
+                startFollower();
+           }
+        }else {
+            if (preparingToAttackCountDown.isFinish() && !attacking){
+                creatureActivity = CreatureActivity.ATTACK; // utocna animacia
+                attackingCountDown = new CountDown(50);
+                attacking = true;
+                if (arriveDistance <= 0.5f) {
+                    System.out.println("damage");
+//                    Combat combat = new Combat(character,target);
+                }
+            }else if(attacking){
+                if (attackingCountDown.isFinish()){
+                    preparingToAttack = false;
+                    System.out.println("end of attack");
+                    attacking = false;
+                }
+            }
+        }
+    }
+
+    /**
+     * ako casto bude spomalovat
+     */
+    private void setRest() {
+        isRest = (new Random().nextInt(25 - 1) + 1) == 1;
     }
 
 

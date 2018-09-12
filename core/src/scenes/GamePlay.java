@@ -1,8 +1,8 @@
 package scenes;
 
-import background.Background;
-import border.EndBorder;
-import border.StartBorder;
+import scenes.background.Background;
+import scenes.border.EndBorder;
+import scenes.border.StartBorder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -15,13 +15,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameMain;
 import creatures.CreaturesController;
 import gameInfo.UserDataType;
-import ground.Ground;
-import ground.GroundController;
+import scenes.ground.Ground;
+import scenes.ground.GroundController;
 import gameInfo.GameInfo;
 import level.Level1;
 import player.Player;
-
-import java.util.logging.Level;
 
 public class GamePlay implements Screen,ContactListener {
     private GameMain game;
@@ -58,7 +56,7 @@ public class GamePlay implements Screen,ContactListener {
         startBorder = new StartBorder(world);
         endBorder = new EndBorder(world);
 
-        player = new Player(world, groundController.getWidthGround());
+        player = new Player(world);
 
         creaturesController = new CreaturesController(world,level.getStopPointArrayData(), player);
 

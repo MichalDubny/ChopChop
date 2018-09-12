@@ -1,4 +1,4 @@
-package ground;
+package scenes.ground;
 
 import gameInfo.UserData;
 import gameInfo.UserDataType;

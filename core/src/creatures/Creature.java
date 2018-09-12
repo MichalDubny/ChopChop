@@ -1,5 +1,6 @@
 package creatures;
 
+import combat.CombatParameters;
 import creatures.aiArrive.AIArrive;
 import creatures.aiArrive.Box2dSteeringEntity;
 import com.badlogic.gdx.Gdx;
@@ -13,7 +14,7 @@ import player.Player;
 
 import java.util.Map;
 
-public class Creature extends Sprite {
+public class Creature extends Sprite implements CombatParameters {
     private World world;
     private Body body;
     private String name;
@@ -25,7 +26,7 @@ public class Creature extends Sprite {
     private float elapsedTime;
     private CreatureActivity activity;
 
-    private Map<CreatureActivity,TextureAtlas> arrayAnimations;
+    Map<CreatureActivity,AnimationsParameters> arrayAnimations;
 
     public Creature() {
     }
@@ -79,35 +80,41 @@ public class Creature extends Sprite {
 
 
 
-    public void drawAnimation(SpriteBatch batch, Map<CreatureActivity, TextureAtlas> arrayAnimations, Vector2 position, float v) {
-        TextureAtlas textureAtlas = choseActionAnimation(arrayAnimations);
-        float frameDuration = 1f / v;
+    public void drawAnimation(SpriteBatch batch, Map<CreatureActivity,AnimationsParameters> arrayAnimations, Vector2 position) {
+        AnimationsParameters animationsParameters = choseActionAnimation(arrayAnimations);
+        float frameDuration = 1f / animationsParameters.getFrameDuration();
         elapsedTime += Gdx.graphics.getDeltaTime();
-        Array<TextureAtlas.AtlasRegion> frames = textureAtlas.getRegions();
+        Array<TextureAtlas.AtlasRegion> frames = animationsParameters.getTextureAtlas().getRegions();
 
         for (TextureRegion frame : frames) {
             setFlipSide(body.getLinearVelocity().x, frame);
         }
 
-        Animation<TextureAtlas.AtlasRegion> animation = new Animation<TextureAtlas.AtlasRegion>(frameDuration, textureAtlas.getRegions());
+        Animation<TextureAtlas.AtlasRegion> animation = new Animation<TextureAtlas.AtlasRegion>(frameDuration, animationsParameters.getTextureAtlas().getRegions());
         batch.draw(animation.getKeyFrame(elapsedTime, true),
                 GameInfo.metersToPixels(position.x) - this.getWidth() / 2f  ,
-                GameInfo.metersToPixels(position.y) - (getHeight() / 2f -10)  );
-    }
-
-    private TextureAtlas choseActionAnimation(Map<CreatureActivity,TextureAtlas> arrayAnimations) {
-        return arrayAnimations.get(activity);
+                GameInfo.metersToPixels(position.y) - (getHeight() / 2f -5)  );
     }
 
 
-    private void setFlipSide(float x, TextureRegion player) {
-        if (x < 0 && !player.isFlipX()) {
-            player.flip(true, false);
-        } else if (x > 0 && player.isFlipX()) {
-            player.flip(true, false);
+    private void setFlipSide(float x, TextureRegion frame) {
+        if(player.getSteeringEntity().getPosition().x - body.getPosition().x < 0 && !frame.isFlipX()){
+            frame.flip(true, false);
+        } else if(player.getSteeringEntity().getPosition().x - body.getPosition().x > 0 && frame.isFlipX()){
+            frame.flip(true, false);
         }
     }
 
+
+    private AnimationsParameters choseActionAnimation(Map<CreatureActivity,AnimationsParameters> arrayAnimations) {
+        AnimationsParameters animationsParameters = new AnimationsParameters();
+        if(arrayAnimations.get(activity) == null){
+            animationsParameters = arrayAnimations.get(CreatureActivity.IDLE);
+        }else {
+            animationsParameters = arrayAnimations.get(activity);
+        }
+        return animationsParameters;
+    }
 
     public void update() {
         aiArrive.update();
@@ -118,11 +125,11 @@ public class Creature extends Sprite {
         activity = aiArrive.getCreatureActivity();
     }
 
-    public Map<CreatureActivity,TextureAtlas> getArrayAnimations() {
+    public Map<CreatureActivity, AnimationsParameters> getArrayAnimations() {
         return arrayAnimations;
     }
 
-    public void setArrayAnimations(Map<CreatureActivity, TextureAtlas> arrayAnimations) {
+    public void setArrayAnimations(Map<CreatureActivity, AnimationsParameters> arrayAnimations) {
         this.arrayAnimations = arrayAnimations;
     }
 
@@ -143,5 +150,23 @@ public class Creature extends Sprite {
     }
 
 
+    @Override
+    public int getHealPoints() {
+        return 0;
+    }
 
+    @Override
+    public void setHealPoints(int healPoints) {
+
+    }
+
+    @Override
+    public int getAttackDamage() {
+        return 0;
+    }
+
+    @Override
+    public void setAttackDamage(int attackDamage) {
+
+    }
 }

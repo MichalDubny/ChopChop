@@ -1,15 +1,16 @@
-package border;
+package scenes.border;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 import gameInfo.GameInfo;
-public class StartBorder extends Sprite {
+
+public class EndBorder extends Sprite {
     private World world;
     private Body body;
 
-    public StartBorder(World world) {
+    public EndBorder(World world) {
         this.world = world;
-        setPosition(0 ,GameInfo.HEIGHT/2);
+        setPosition(GameInfo.WIDTH*GameInfo.REPEAT_BG ,GameInfo.HEIGHT/2);
         createBody();
     }
 
@@ -17,7 +18,7 @@ public class StartBorder extends Sprite {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(0,GameInfo.HEIGHT/2/GameInfo.PPM );
+        bodyDef.position.set((GameInfo.WIDTH*GameInfo.REPEAT_BG)/GameInfo.PPM,GameInfo.HEIGHT/2/GameInfo.PPM );
 
         body = world.createBody(bodyDef);
 

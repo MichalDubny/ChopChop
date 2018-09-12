@@ -1,4 +1,4 @@
-package background;
+package scenes.background;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;

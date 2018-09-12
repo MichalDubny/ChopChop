@@ -1,0 +1,55 @@
+
+GhostAnimationAttack.png
+size: 128,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ghost-halo-1
+  rotate: false
+  xy: 2, 136
+  size: 37, 65
+  orig: 37, 65
+  offset: 0, 0
+  index: -1
+ghost-halo-2
+  rotate: false
+  xy: 2, 69
+  size: 37, 65
+  orig: 37, 65
+  offset: 0, 0
+  index: -1
+ghost-halo-3
+  rotate: false
+  xy: 41, 136
+  size: 37, 65
+  orig: 37, 65
+  offset: 0, 0
+  index: -1
+ghost-halo-4
+  rotate: false
+  xy: 2, 2
+  size: 37, 65
+  orig: 37, 65
+  offset: 0, 0
+  index: -1
+ghost-halo-5
+  rotate: false
+  xy: 41, 69
+  size: 37, 65
+  orig: 37, 65
+  offset: 0, 0
+  index: -1
+ghost-halo-6
+  rotate: false
+  xy: 80, 136
+  size: 37, 65
+  orig: 37, 65
+  offset: 0, 0
+  index: -1
+ghost-halo-7
+  rotate: false
+  xy: 41, 2
+  size: 37, 65
+  orig: 37, 65
+  offset: 0, 0
+  index: -1

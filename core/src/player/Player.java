@@ -1,5 +1,6 @@
 package player;
 
+import combat.CombatParameters;
 import creatures.aiArrive.Box2dSteeringEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import gameInfo.GameInfo;
 import gameInfo.UserDataType;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements CombatParameters {
     private World world;
     private Body body;
     private PlayerData playerUserData;
@@ -24,7 +25,10 @@ public class Player extends Sprite {
     private boolean isJumping;
     private boolean isWalking;
 
-    public Player(World world, float widthFloor) {
+    private int healPoints;
+    private int attackDamage;
+
+    public Player(World world) {
         super(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\player\\hero.png"));
         textureRegion = new TextureRegion(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\player\\hero.png"));
 
@@ -35,6 +39,8 @@ public class Player extends Sprite {
         playerAtlasIdle = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\idle\\PlayerAnimationIdle.atlas");
         playerAtlasJump = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\jump\\PlayerAnimationJump.atlas");
         playerUserData = new PlayerData();
+        this.healPoints = 100;
+        this.attackDamage = 20;
     }
 
     private void createBody() {
@@ -174,5 +180,25 @@ public class Player extends Sprite {
 
     public Box2dSteeringEntity getSteeringEntity() {
         return steeringEntity;
+    }
+
+    @Override
+    public int getHealPoints() {
+        return healPoints;
+    }
+
+    @Override
+    public void setHealPoints(int healPoints) {
+        this.healPoints = healPoints;
+    }
+
+    @Override
+    public int getAttackDamage() {
+        return attackDamage;
+    }
+
+    @Override
+    public void setAttackDamage(int attackDamage) {
+        this.attackDamage = attackDamage;
     }
 }
