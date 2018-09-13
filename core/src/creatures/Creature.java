@@ -1,6 +1,6 @@
 package creatures;
 
-import combat.CombatParameters;
+import combat.CombatEntity;
 import creatures.aiArrive.AIArrive;
 import creatures.aiArrive.Box2dSteeringEntity;
 import com.badlogic.gdx.Gdx;
@@ -14,15 +14,14 @@ import player.Player;
 
 import java.util.Map;
 
-public class Creature extends Sprite implements CombatParameters {
+public class Creature extends CombatEntity {
     private World world;
     private Body body;
     private String name;
     private Vector2 vector2;
     private TextureRegion textureRegion;
-    private Box2dSteeringEntity steeringEntity;
     private Player player;
-    private AIArrive aiArrive;
+    private AIArrive<Creature,Player> aiArrive;
     private float elapsedTime;
     private CreatureActivity activity;
 
@@ -75,7 +74,7 @@ public class Creature extends Sprite implements CombatParameters {
     }
 
     private void setArrive() {
-        aiArrive = new AIArrive(world, this.getSteeringEntity(), player.getSteeringEntity());
+        aiArrive = new AIArrive(world, this, player);
     }
 
 
@@ -150,23 +149,4 @@ public class Creature extends Sprite implements CombatParameters {
     }
 
 
-    @Override
-    public int getHealPoints() {
-        return 0;
-    }
-
-    @Override
-    public void setHealPoints(int healPoints) {
-
-    }
-
-    @Override
-    public int getAttackDamage() {
-        return 0;
-    }
-
-    @Override
-    public void setAttackDamage(int attackDamage) {
-
-    }
 }

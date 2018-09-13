@@ -18,6 +18,12 @@ public class Ghost extends Creature implements Creatures {
     public Ghost(World world, Vector2 v, Player player) {
         super(world, "ghost", v, player);
         setAnimations();
+        setCombatData();
+    }
+
+    public void setCombatData() {
+        setHealPoints(30);
+        setAttackDamage(10);
     }
 //
 //    public void setAnimations() {

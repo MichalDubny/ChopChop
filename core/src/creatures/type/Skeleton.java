@@ -20,6 +20,13 @@ public class Skeleton extends Creature implements Creatures {
     public Skeleton(World world, Vector2 v, Player player) {
         super(world, "skeleton", v, player);
         setAnimations();
+        setCombatData();
+    }
+
+    @Override
+    public void setCombatData() {
+        setHealPoints(50);
+        setAttackDamage(5);
     }
 
     @Override

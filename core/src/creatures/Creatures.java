@@ -6,5 +6,8 @@ import java.util.Map;
 
 public interface Creatures {
 
+     void setCombatData();
      void setAnimations();
+
+
 }

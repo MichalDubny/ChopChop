@@ -6,23 +6,28 @@ import javafx.print.PageLayout;
 import player.Player;
 
 public class Combat<T,P> {
-    private T attacker;
-    private P defender;
+    private CombatEntity attacker;
+    private CombatEntity defender;
     private Player player;
     private Creature creature;
 
-    public Combat(T attacker, P defender) {
+    public<T extends CombatEntity,P extends CombatEntity>  Combat(T attacker, P defender) {
         this.attacker = attacker;
         this.defender = defender;
         setResult();
     }
 
     private void setResult() {
-        String sss = attacker.getClass().getName();
-        if(attacker.getClass().getName() == "Player"){
-            System.out.println("Player");
-        }else {
-            System.out.println("Creature");
+        int AD = attacker.getAttackDamage();
+        int HP = defender.getHealPoints();
+        System.out.println( HP + " - " +AD + " = " + (HP-AD) );
+        defender.setHealPoints(defender.getHealPoints() - attacker.getAttackDamage());
+        if(defender.getHealPoints() <= 0 ){
+            defender.setDead(true);
         }
+
+
     }
+
+
 }

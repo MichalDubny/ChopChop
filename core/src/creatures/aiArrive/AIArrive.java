@@ -9,12 +9,15 @@ import com.badlogic.gdx.ai.steer.behaviors.PrioritySteering;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import combat.Combat;
+import combat.CombatEntity;
+import creatures.Creature;
 import creatures.CreatureActivity;
+import player.Player;
 import utils.CountDown;
 
 import java.util.Random;
 
-public class AIArrive {
+public class AIArrive<T,P> {
     private InputProcessor inputProcessor;
     private Box2dSteeringEntity target;
     private Box2dSteeringEntity character;
@@ -27,15 +30,20 @@ public class AIArrive {
     private boolean attacking = false;
     private CountDown preparingToAttackCountDown;
     private CountDown attackingCountDown;
+    private CombatEntity targetCombatEntity;
+    private CombatEntity characterCombatEntity;
 
 
-    public AIArrive(World world, Box2dSteeringEntity follower, Box2dSteeringEntity target) {
+//    public AIArrive(World world, Box2dSteeringEntity follower, Box2dSteeringEntity target) {
+    public <T extends CombatEntity,P extends CombatEntity> AIArrive (World world, T follower, P target) {
         this.world = world;
-        this.target = target;
-        this.character = follower;
+        this.targetCombatEntity = target;
+        this.characterCombatEntity = follower;
+        this.target = target.getSteeringEntity();
+        this.character = follower.getSteeringEntity();
         startFollower();
 
-        inputProcessor = new Box2dTargetInputProcessor(target);
+        inputProcessor = new Box2dTargetInputProcessor(this.target);
 
         setArrive();
         PrioritySteering<Vector2> prioritySteering = new PrioritySteering<Vector2>(character,0.0001f)
@@ -111,7 +119,8 @@ public class AIArrive {
                 attacking = true;
                 if (arriveDistance <= 0.5f) {
                     System.out.println("damage");
-//                    Combat combat = new Combat(character,target);
+//                    Creature cr = target;
+                    Combat<Creature, Player> combat = new Combat(characterCombatEntity,targetCombatEntity);
                 }
             }else if(attacking){
                 if (attackingCountDown.isFinish()){

@@ -1,6 +1,6 @@
 package player;
 
-import combat.CombatParameters;
+import combat.CombatEntity;
 import creatures.aiArrive.Box2dSteeringEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import gameInfo.GameInfo;
 import gameInfo.UserDataType;
 
-public class Player extends Sprite implements CombatParameters {
+public class Player extends CombatEntity {
     private World world;
     private Body body;
     private PlayerData playerUserData;
@@ -20,13 +20,10 @@ public class Player extends Sprite implements CombatParameters {
     private TextureAtlas playerAtlasJump;
     private float elapsedTime;
     private TextureRegion textureRegion;
-    private Box2dSteeringEntity steeringEntity;
 
     private boolean isJumping;
     private boolean isWalking;
 
-    private int healPoints;
-    private int attackDamage;
 
     public Player(World world) {
         super(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\player\\hero.png"));
@@ -130,14 +127,10 @@ public class Player extends Sprite implements CombatParameters {
         }
 
         Animation<TextureAtlas.AtlasRegion> animation = new Animation<TextureAtlas.AtlasRegion>(frameDuration, textureAtlas.getRegions());
-//        batch.draw(animation.getKeyFrame(elapsedTime, true),
-//                getX() - this.getWidth() / 2f +10, getY() - (getHeight() / 2f -10)  );
         batch.draw(animation.getKeyFrame(elapsedTime, true),
                 GameInfo.metersToPixels(body.getPosition().x)-20 - this.getWidth() / 2f ,
                 GameInfo.metersToPixels(body.getPosition().y) - (getHeight() / 2f )  );
     }
-
-
 
 
     private void setFlipSide(float x, TextureRegion player) {
@@ -178,27 +171,24 @@ public class Player extends Sprite implements CombatParameters {
         return playerUserData;
     }
 
-    public Box2dSteeringEntity getSteeringEntity() {
-        return steeringEntity;
-    }
-
-    @Override
-    public int getHealPoints() {
-        return healPoints;
-    }
-
-    @Override
-    public void setHealPoints(int healPoints) {
-        this.healPoints = healPoints;
-    }
-
-    @Override
-    public int getAttackDamage() {
-        return attackDamage;
-    }
-
-    @Override
-    public void setAttackDamage(int attackDamage) {
-        this.attackDamage = attackDamage;
-    }
+//
+//    @Override
+//    public int getHealPoints() {
+//        return healPoints;
+//    }
+//
+//    @Override
+//    public void setHealPoints(int healPoints) {
+//        this.healPoints = healPoints;
+//    }
+//
+//    @Override
+//    public int getAttackDamage() {
+//        return attackDamage;
+//    }
+//
+//    @Override
+//    public void setAttackDamage(int attackDamage) {
+//        this.attackDamage = attackDamage;
+//    }
 }
