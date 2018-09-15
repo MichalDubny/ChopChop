@@ -144,13 +144,13 @@ public class AIArrive<T,P> {
     private void setBehavior(float deltaTime) {
 //      TODO prerobit aby rozna potvori maly rozne parametre min/max dosah  rychlost utoku
         arriveDistance = getDistance(target.getPosition(),character.getPosition());
-        if(activity != CreatureActivity.ATTACK_PREPARE) {
-            if (arriveDistance <= characterCombatEntity.getAttackDistance() * (2f / 3f)) {  // dve tretny dosahu utoku
+        if(activity != CreatureActivity.ATTACK_PREPARE && activity != CreatureActivity.ATTACK) {
+            if (arriveDistance <= characterCombatEntity.getAttackDistance() * (2f / 3f)) {  // dve tretiny dosahu utoku vtedy zacne tocit
                 stopFollower();
                 animationActivity = CreatureActivity.IDLE;
                 activity = CreatureActivity.ATTACK_PREPARE;
                 preparingToAttackCountDown = new CountDown(200);
-            } else if (getRest() && (activity != CreatureActivity.REST && activity == CreatureActivity.WALK)) {
+            } else if (getRest() && (activity != CreatureActivity.REST && activity == CreatureActivity.WALK )) {
 //              aby jednoty nesli stale rovnakou rychlostou a nenakopili na jednu hromadu
                 setRestAction();
             }else if(activity == CreatureActivity.REST){
@@ -158,17 +158,13 @@ public class AIArrive<T,P> {
             }else if (arriveDistance >= 5f) {
 //              max dosah v tomto dosahu uz neprenasleduje nepriatela
                 stopFollower();
-                animationActivity = CreatureActivity.IDLE;
-                activity = CreatureActivity.IDLE;
+                activity = animationActivity = CreatureActivity.IDLE;
             } else {
                 startFollower();
+                activity = animationActivity = CreatureActivity.WALK;
             }
         }else {
             attackAction();
-        }
-        if(character.getMaxLinearSpeed() != 0){
-            animationActivity = CreatureActivity.WALK;
-            activity = CreatureActivity.WALK;
         }
     }
 
@@ -179,7 +175,7 @@ public class AIArrive<T,P> {
         if(restCountDown.isFinish()){
 //            System.out.println("rest");
             startFollower();
-            animationActivity = CreatureActivity.WALK;
+            activity = animationActivity = CreatureActivity.WALK;
         }
     }
 
@@ -195,9 +191,8 @@ public class AIArrive<T,P> {
 
     private void attackAction() {
         if (preparingToAttackCountDown.isFinish() && activity != CreatureActivity.ATTACK){
-            animationActivity = CreatureActivity.ATTACK; // utocna animacia
-            attackingCountDown = new CountDown(50);
-            activity = CreatureActivity.ATTACK;
+            activity = animationActivity = CreatureActivity.ATTACK; // utocna animacia
+            attackingCountDown = new CountDown(50); //50
             if (arriveDistance <= characterCombatEntity.getAttackDistance()) {
                 System.out.println("damage");
                 Combat<Creature, Player> combat = new Combat(characterCombatEntity,targetCombatEntity);
