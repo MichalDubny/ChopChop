@@ -124,7 +124,7 @@ public class Creature extends CombatEntity {
     }
 
     private void setActivity() {
-        activity = aiArrive.getCreatureActivity();
+        activity = aiArrive.getAnimationActivity();
     }
 
     public Map<CreatureActivity, AnimationsParameters> getArrayAnimations() {

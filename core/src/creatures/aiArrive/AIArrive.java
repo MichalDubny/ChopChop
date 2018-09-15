@@ -1,7 +1,6 @@
 package creatures.aiArrive;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
@@ -24,12 +23,17 @@ public class AIArrive<T,P> {
     private World world;
     private Arrive<Vector2> arriveSB;
     private float arriveDistance;
-    private CreatureActivity creatureActivity;
-    private boolean isRest;
-    private boolean preparingToAttack = false;
-    private boolean attacking = false;
+    private CreatureActivity animationActivity;
+    private CreatureActivity activity;
+//    private boolean isRest;
+//    private boolean preparingToAttack = false;
+//    private boolean attacking = false;
+
+
+    private CountDown restCountDown;
     private CountDown preparingToAttackCountDown;
     private CountDown attackingCountDown;
+
     private CombatEntity targetCombatEntity;
     private CombatEntity characterCombatEntity;
 
@@ -49,6 +53,7 @@ public class AIArrive<T,P> {
         PrioritySteering<Vector2> prioritySteering = new PrioritySteering<Vector2>(character,0.0001f)
                 .add(arriveSB);
         character.setSteeringBehavior(prioritySteering);
+        activity = CreatureActivity.IDLE;
     }
 
     private void setArrive() {
@@ -89,44 +94,118 @@ public class AIArrive<T,P> {
         character.update(GdxAI.getTimepiece().getDeltaTime());
     }
 
+//    private void setBehavior(float deltaTime) {
+////      TODO prerobit aby rozna potvori maly rozne parametre min/max dosah  rychlost utoku
+//        arriveDistance = getDistance(target.getPosition(),character.getPosition());
+//        if(!preparingToAttack) {
+//            if (arriveDistance <= characterCombatEntity.getAttackDistance()*(2f/3f)) {  // dve tretny dosahu utoku
+//                stopFollower();
+//                animationActivity = CreatureActivity.IDLE;
+//                preparingToAttack = true;
+//                preparingToAttackCountDown = new CountDown(200);
+//            } else if (getRest() && !isRest) {
+////              aby jednoty nesli stale rovnakou rychlostou a nenakopili na jednu hromadu
+//                isRest = true;
+//                restCountDown = new CountDown(200);
+//                animationActivity = CreatureActivity.IDLE;
+//                if(restCountDown.isFinish()){
+//                    stopFollower();
+//                    System.out.println("rest");
+//                    isRest = false;
+//                }
+////
+//           } else if (arriveDistance >= 5f) {
+////              max dosah v tomto dosahu uz neprenasleduje nepriatela
+//                stopFollower();
+//                animationActivity = CreatureActivity.IDLE;
+//           } else {
+//                animationActivity = CreatureActivity.WALK;
+//                startFollower();
+//           }
+//        }else {
+//            if (preparingToAttackCountDown.isFinish() && !attacking){
+//                animationActivity = CreatureActivity.ATTACK; // utocna animacia
+//                attackingCountDown = new CountDown(50);
+//                attacking = true;
+//                if (arriveDistance <= characterCombatEntity.getAttackDistance()) {
+//                    System.out.println("damage");
+//                    Combat<Creature, Player> combat = new Combat(characterCombatEntity,targetCombatEntity);
+//                }
+//            }else if(attacking){
+//                if (attackingCountDown.isFinish()){
+//                    preparingToAttack = false;
+//                    System.out.println("end of attack");
+//                    attacking = false;
+//                }
+//            }
+//        }
+//    }
+
     private void setBehavior(float deltaTime) {
 //      TODO prerobit aby rozna potvori maly rozne parametre min/max dosah  rychlost utoku
         arriveDistance = getDistance(target.getPosition(),character.getPosition());
-        if(!preparingToAttack) {
-            setRest();
-            if (arriveDistance <= characterCombatEntity.getAttackDistance()*(2f/3f)) {  // dve tretny dosahu utoku
+        if(activity != CreatureActivity.ATTACK_PREPARE) {
+            if (arriveDistance <= characterCombatEntity.getAttackDistance() * (2f / 3f)) {  // dve tretny dosahu utoku
                 stopFollower();
-                creatureActivity = CreatureActivity.IDLE;
-                preparingToAttack = true;
+                animationActivity = CreatureActivity.IDLE;
+                activity = CreatureActivity.ATTACK_PREPARE;
                 preparingToAttackCountDown = new CountDown(200);
-            } else if (isRest) {
+            } else if (getRest() && (activity != CreatureActivity.REST && activity == CreatureActivity.WALK)) {
 //              aby jednoty nesli stale rovnakou rychlostou a nenakopili na jednu hromadu
-                stopFollower();
-                System.out.println("rest");
-//                creatureActivity = CreatureActivity.IDLE;
-           } else if (arriveDistance >= 5f) {
+                setRestAction();
+            }else if(activity == CreatureActivity.REST){
+                setEndRestAction();
+            }else if (arriveDistance >= 5f) {
 //              max dosah v tomto dosahu uz neprenasleduje nepriatela
                 stopFollower();
-                creatureActivity = CreatureActivity.IDLE;
-           } else {
-                creatureActivity = CreatureActivity.WALK;
+                animationActivity = CreatureActivity.IDLE;
+                activity = CreatureActivity.IDLE;
+            } else {
                 startFollower();
-           }
+            }
         }else {
-            if (preparingToAttackCountDown.isFinish() && !attacking){
-                creatureActivity = CreatureActivity.ATTACK; // utocna animacia
-                attackingCountDown = new CountDown(50);
-                attacking = true;
-                if (arriveDistance <= characterCombatEntity.getAttackDistance()) {
-                    System.out.println("damage");
-                    Combat<Creature, Player> combat = new Combat(characterCombatEntity,targetCombatEntity);
-                }
-            }else if(attacking){
-                if (attackingCountDown.isFinish()){
-                    preparingToAttack = false;
-                    System.out.println("end of attack");
-                    attacking = false;
-                }
+            attackAction();
+        }
+        if(character.getMaxLinearSpeed() != 0){
+            animationActivity = CreatureActivity.WALK;
+            activity = CreatureActivity.WALK;
+        }
+    }
+
+    /**
+     * v pripade ze skonci odpocet sa ukonci odpocinok potvory
+     */
+    private void setEndRestAction() {
+        if(restCountDown.isFinish()){
+//            System.out.println("rest");
+            startFollower();
+            animationActivity = CreatureActivity.WALK;
+        }
+    }
+
+    /**
+     * nastavy odpocinok potvory
+     */
+    private void setRestAction() {
+        animationActivity = CreatureActivity.IDLE;
+        activity = CreatureActivity.REST;
+        restCountDown = new CountDown(150);
+        stopFollower();
+    }
+
+    private void attackAction() {
+        if (preparingToAttackCountDown.isFinish() && activity != CreatureActivity.ATTACK){
+            animationActivity = CreatureActivity.ATTACK; // utocna animacia
+            attackingCountDown = new CountDown(50);
+            activity = CreatureActivity.ATTACK;
+            if (arriveDistance <= characterCombatEntity.getAttackDistance()) {
+                System.out.println("damage");
+                Combat<Creature, Player> combat = new Combat(characterCombatEntity,targetCombatEntity);
+            }
+        }else if(activity == CreatureActivity.ATTACK){
+            if (attackingCountDown.isFinish()){
+                System.out.println("end of attack");
+                activity = CreatureActivity.IDLE;
             }
         }
     }
@@ -134,8 +213,8 @@ public class AIArrive<T,P> {
     /**
      * ako casto bude spomalovat
      */
-    private void setRest() {
-        isRest = (new Random().nextInt(25 - 1) + 1) == 1;
+    private boolean getRest() {
+        return ((new Random().nextInt(250 - 1) + 1) == 1); //25
     }
 
 
@@ -143,7 +222,7 @@ public class AIArrive<T,P> {
         return Vector2.dst(a.x,a.y,b.x,b.y);
     }
 
-    public CreatureActivity getCreatureActivity() {
-        return creatureActivity;
+    public CreatureActivity getAnimationActivity() {
+        return animationActivity;
     }
 }
