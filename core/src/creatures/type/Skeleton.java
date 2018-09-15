@@ -25,8 +25,9 @@ public class Skeleton extends Creature implements Creatures {
 
     @Override
     public void setCombatData() {
-        setHealPoints(50);
+        setHealthPoints(50);
         setAttackDamage(5);
+        attackDistance = 0.5f;
     }
 
     @Override

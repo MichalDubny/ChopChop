@@ -10,10 +10,12 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import gameInfo.GameInfo;
 import gameInfo.UserDataType;
+import utils.CountDown;
 
 public class Player extends CombatEntity {
     private World world;
     private Body body;
+    private Body weaponBody;
     private PlayerData playerUserData;
     private TextureAtlas playerAtlasWalk;
     private TextureAtlas playerAtlasIdle;
@@ -23,7 +25,9 @@ public class Player extends CombatEntity {
 
     private boolean isJumping;
     private boolean isWalking;
+    private boolean isFaceRight = true;
 
+    private CountDown endAttack;
 
     public Player(World world) {
         super(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\player\\hero.png"));
@@ -38,6 +42,7 @@ public class Player extends CombatEntity {
         playerUserData = new PlayerData();
         this.healPoints = 100;
         this.attackDamage = 20;
+        this.attackDistance = 20f;  //0.5
     }
 
     private void createBody() {
@@ -87,17 +92,51 @@ public class Player extends CombatEntity {
         }
     }
 
+    public void attack(){
+        setAttacking(true);
+        createWeapon();
 
+        endAttack = new CountDown(100);
+
+    }
+
+    private void createWeapon() {
+        BodyDef weaponBodyDef = new BodyDef();
+        weaponBodyDef.type = BodyDef.BodyType.KinematicBody;
+        float weaponPositionX = (isFaceRight)? getX()+(this.attackDistance) : getX()-(this.attackDistance);
+        weaponBodyDef.position.set(weaponPositionX /GameInfo.PPM,getY()/GameInfo.PPM );
+
+        weaponBody = world.createBody(weaponBodyDef);
+        weaponBody.setFixedRotation(true);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox((this.attackDistance / 2f)/GameInfo.PPM ,1/GameInfo.PPM );
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = GameInfo.WEAPON;
+        fixtureDef.isSensor = true;
+
+        Fixture fixture = weaponBody.createFixture(fixtureDef);
+        fixture.setUserData(UserDataType.WEAPON);
+
+        shape.dispose();
+    }
+
+    private void destroyWeapon() {
+        world.destroyBody(weaponBody);
+    }
 
     public Body getBody() {
         return body;
     }
+
 
     public void drawPlayerAnimation(SpriteBatch batch) {
         drawPlayerIdle(batch);
         drawPlayerWalk(batch);
         drawPlayerJump(batch);
     }
+
 
     private void drawPlayerIdle(SpriteBatch batch) {
         if(!isWalking && !isJumping) {
@@ -136,15 +175,24 @@ public class Player extends CombatEntity {
     private void setFlipSide(float x, TextureRegion player) {
         if (x < 0 && !player.isFlipX()) {
             player.flip(true, false);
+            isFaceRight = false;
         } else if (x > 0 && player.isFlipX()) {
             player.flip(true, false);
+            isFaceRight = true;
         }
     }
 
 
-    public void updatePlayer() {
+    public void update() {
         float bodyX = ((body.getPosition().x) * GameInfo.PPM);
         setPosition(bodyX,body.getPosition().y * GameInfo.PPM);
+        if(isAttacking()){
+            if(endAttack.isFinish()){
+                System.out.println("player end attack");
+                destroyWeapon();
+                this.attacking = false;
+            }
+        }
     }
 
     public float getBodyXPosition(){
@@ -171,24 +219,5 @@ public class Player extends CombatEntity {
         return playerUserData;
     }
 
-//
-//    @Override
-//    public int getHealPoints() {
-//        return healPoints;
-//    }
-//
-//    @Override
-//    public void setHealPoints(int healPoints) {
-//        this.healPoints = healPoints;
-//    }
-//
-//    @Override
-//    public int getAttackDamage() {
-//        return attackDamage;
-//    }
-//
-//    @Override
-//    public void setAttackDamage(int attackDamage) {
-//        this.attackDamage = attackDamage;
-//    }
+
 }

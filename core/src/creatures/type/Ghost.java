@@ -22,17 +22,10 @@ public class Ghost extends Creature implements Creatures {
     }
 
     public void setCombatData() {
-        setHealPoints(30);
+        setHealthPoints(30);
         setAttackDamage(10);
+        attackDistance = 0.7f;
     }
-//
-//    public void setAnimations() {
-//        arrayAnimations = new HashMap<CreatureActivity, TextureAtlas>();
-//        TextureAtlas idle = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\creatures\\ghost\\GhostAnimation.atlas");
-//        arrayAnimations.put(CreatureActivity.IDLE, idle);
-//        arrayAnimations.put(CreatureActivity.WALK, idle);
-//        super.setArrayAnimations(arrayAnimations);
-//    }
 
     public void setAnimations() {
         Map<CreatureActivity, AnimationsParameters> arrayAnimations  = new HashMap<CreatureActivity, AnimationsParameters>();

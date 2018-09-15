@@ -81,7 +81,7 @@ public class AIArrive<T,P> {
         GdxAI.getTimepiece().update(Gdx.graphics.getDeltaTime());
         float deltaTime = GdxAI.getTimepiece().getDeltaTime();
 
-        // Update box2d world
+//      Update box2d world
         world.step(deltaTime, 8, 3);
 
         setBehavior(deltaTime);
@@ -90,22 +90,22 @@ public class AIArrive<T,P> {
     }
 
     private void setBehavior(float deltaTime) {
-//TODO prerobit aby rozna potvori maly rozne parametre min/max dosah  rychlost utoku
+//      TODO prerobit aby rozna potvori maly rozne parametre min/max dosah  rychlost utoku
         arriveDistance = getDistance(target.getPosition(),character.getPosition());
         if(!preparingToAttack) {
             setRest();
-            if (arriveDistance <= 0.3f) {  //.8
+            if (arriveDistance <= characterCombatEntity.getAttackDistance()*(2f/3f)) {  // dve tretny dosahu utoku
                 stopFollower();
                 creatureActivity = CreatureActivity.IDLE;
                 preparingToAttack = true;
                 preparingToAttackCountDown = new CountDown(200);
             } else if (isRest) {
-        //          aby jednoty nesli stale rovnakou rychlostou a nenakopili na jednu hromadu
+//              aby jednoty nesli stale rovnakou rychlostou a nenakopili na jednu hromadu
                 stopFollower();
                 System.out.println("rest");
 //                creatureActivity = CreatureActivity.IDLE;
            } else if (arriveDistance >= 5f) {
-        //            max dosah v tomto dosahu uz neprenasleduje nepriatela
+//              max dosah v tomto dosahu uz neprenasleduje nepriatela
                 stopFollower();
                 creatureActivity = CreatureActivity.IDLE;
            } else {
@@ -117,9 +117,8 @@ public class AIArrive<T,P> {
                 creatureActivity = CreatureActivity.ATTACK; // utocna animacia
                 attackingCountDown = new CountDown(50);
                 attacking = true;
-                if (arriveDistance <= 0.5f) {
+                if (arriveDistance <= characterCombatEntity.getAttackDistance()) {
                     System.out.println("damage");
-//                    Creature cr = target;
                     Combat<Creature, Player> combat = new Combat(characterCombatEntity,targetCombatEntity);
                 }
             }else if(attacking){

@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import combat.Combat;
+import gameInfo.GameInfo;
+import gameInfo.UserData;
+import gameInfo.UserDataType;
 import level.StopPoint;
 import player.Player;
 
@@ -12,10 +16,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class CreaturesController {
-    World world;
-    Array<Creature> creatures;
-    ArrayList<StopPoint> stopPointArrayData;
-    Player player;
+    private World world;
+    private Array<Creature> creatures;
+    private ArrayList<StopPoint> stopPointArrayData;
+    private Player player;
 
 
     public CreaturesController(World world, ArrayList<StopPoint> stopPointArrayData, Player player) {
@@ -24,7 +28,6 @@ public class CreaturesController {
         this.player = player;
         creatures = new Array<Creature>();
         generateStartingCreatures();
-
     }
 
 
@@ -44,7 +47,6 @@ public class CreaturesController {
                 Constructor c = Class.forName("creatures.type." + creatureTypeName).getConstructor(World.class, Vector2.class, Player.class);
                 Creature creature = (Creature) c.newInstance(world, spawnPoint, player);
                 System.out.println(creatureTypeName);
-
                 creatures.add(creature);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -58,6 +60,19 @@ public class CreaturesController {
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    /**
+     *  zasiahnutu priseru
+     * @return
+     */
+    public void setAffectedCreature(){
+        for (int i = 0; i < creatures.size; i++){
+            if(creatures.get(i).getFixture().getUserData() == "hit"){
+                creatures.get(i).getFixture().setUserData(UserDataType.CREATURE);
+                Combat<Player, Creature> combat = new Combat<Player, Creature>(player,creatures.get(i));
+            }
         }
     }
 

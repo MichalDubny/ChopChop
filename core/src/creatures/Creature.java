@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import gameInfo.GameInfo;
+import gameInfo.UserDataType;
 import player.Player;
 
 import java.util.Map;
@@ -24,13 +25,12 @@ public class Creature extends CombatEntity {
     private AIArrive<Creature,Player> aiArrive;
     private float elapsedTime;
     private CreatureActivity activity;
+    private Fixture fixture;
 
     Map<CreatureActivity,AnimationsParameters> arrayAnimations;
 
-    public Creature() {
-    }
 
-    public Creature(World world, String name, Vector2 vector2, Player player) {
+    public Creature(World world, String name, Vector2 vector2, Player player ) {
         super(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\creatures\\" + name + "\\" + name + "Slim.png"));
         textureRegion = new TextureRegion(
                 new Texture(GameInfo.ASSETS_PREFIX_URL + "\\creatures\\" + name + "\\" + name + "Slim.png"));
@@ -60,11 +60,14 @@ public class Creature extends CombatEntity {
         fixtureDef.density = 4f;
         fixtureDef.friction = 2f;
         fixtureDef.shape = shape;
-        fixtureDef.filter.categoryBits = GameInfo.CREATURE;
-        fixtureDef.filter.maskBits = GameInfo.DEFAULT ;
 
-        Fixture fixture = body.createFixture(fixtureDef);
-        fixture.setUserData(name);
+        fixtureDef.filter.categoryBits = (short) (GameInfo.CREATURE  );
+        fixtureDef.filter.groupIndex = -1;
+        fixtureDef.filter.maskBits = GameInfo.DEFAULT | GameInfo.WEAPON ;
+
+
+        fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(UserDataType.CREATURE);
 
 
         shape.dispose();
@@ -148,5 +151,7 @@ public class Creature extends CombatEntity {
         return aiArrive;
     }
 
-
+    public Fixture getFixture() {
+        return fixture;
+    }
 }

@@ -15,9 +15,11 @@ public class GameInfo {
      */
     public static final short DEFAULT = 0x0001;
     public static final short PLAYER = 0x0002;
+    public static final short WEAPON = 0x0003;
 
     public static final short DESTROYED = 0x0006;
-    public static final short STOP_POINT = 0x0007;
+    public static final short STOP_POINT = 0x0008;
+
     public static final short CREATURE = 0x0016;
 
 

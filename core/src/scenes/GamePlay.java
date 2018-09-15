@@ -92,22 +92,25 @@ public class GamePlay implements Screen,ContactListener {
      * vstupy z klavesnice
      */
     private void handleInput(){
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             player.movePlayer(player.getPlayerUserData().getLeftMovingLinearImpulse());
-            if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 player.jump();
             }
-        }else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.movePlayer(player.getPlayerUserData().getRightMovingLinearImpulse());
-            if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 player.jump();
             }
-        }else if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             player.jump();
-        }else {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            if(!player.isAttacking()) {
+                player.attack();
+            }
+        } else {
             player.setWalking(false);
         }
-
     }
 
     @Override
@@ -130,8 +133,7 @@ public class GamePlay implements Screen,ContactListener {
         mainCamera.update();
         background.updateBackground(mainCamera);
 
-        player.updatePlayer();
-
+        player.update();
 
         debugRenderer.render(world,box2DCamera.combined);
 
@@ -171,7 +173,7 @@ public class GamePlay implements Screen,ContactListener {
         for(Ground ground : groundController.getGround()){
             ground.getTexture().dispose();
         }
-//        player.getTexture().dispose();
+        player.getTexture().dispose();
         debugRenderer.dispose();
     }
 
@@ -180,15 +182,33 @@ public class GamePlay implements Screen,ContactListener {
         Fixture a = contact.getFixtureA();
         Fixture b = contact.getFixtureB();
 
+        setPlayerLanded(a, b);
+        setStopPointCollision(a, b);
+        setWeaponHitCreature(a, b);
+    }
+
+    private void setPlayerLanded(Fixture a, Fixture b) {
         if ((bodyIsInputName(a,UserDataType.PLAYER) && bodyIsInputName(b,UserDataType.GROUND)) ||
                 (bodyIsInputName(a,UserDataType.GROUND) && bodyIsInputName(b,UserDataType.PLAYER))) {
             player.landed();
         }
+    }
 
+    private void setWeaponHitCreature(Fixture a, Fixture b) {
+        if (bodyIsInputName(a,UserDataType.WEAPON) && bodyIsInputName(b,UserDataType.CREATURE)){
+            b.setUserData("hit");
+            creaturesController.setAffectedCreature();
+
+        }else if(bodyIsInputName(a,UserDataType.CREATURE) && bodyIsInputName(b,UserDataType.WEAPON)) {
+            a.setUserData("hit");
+            creaturesController.setAffectedCreature();
+        }
+    }
+
+    private void setStopPointCollision(Fixture a, Fixture b) {
         if (bodyIsInputName(a,UserDataType.PLAYER) && bodyIsInputName(b,UserDataType.STOP_POINT)){
             b.setUserData("turnOn");
             level.turnOnStopPoint();
-
         }else if(bodyIsInputName(a,UserDataType.STOP_POINT) && bodyIsInputName(b,UserDataType.PLAYER)) {
             a.setUserData("turnOn");
             level.turnOnStopPoint();

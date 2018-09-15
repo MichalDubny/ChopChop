@@ -9,7 +9,10 @@ public class CombatEntity extends Sprite {
 
     protected int healPoints;
     protected int attackDamage;
+    protected float attackDistance;
     protected boolean dead = false;
+    protected boolean attacking = false;
+
 
     public CombatEntity() {
     }
@@ -23,13 +26,12 @@ public class CombatEntity extends Sprite {
     }
 
 
-
     public int getHealPoints() {
         return healPoints;
     }
 
 
-    public void setHealPoints(int healPoints) {
+    public void setHealthPoints(int healPoints) {
         this.healPoints = healPoints;
     }
 
@@ -43,11 +45,27 @@ public class CombatEntity extends Sprite {
         this.attackDamage = attackDamage;
     }
 
+    public float getAttackDistance() {
+        return attackDistance;
+    }
+
+    public void setAttackDistance(float attackDistance) {
+        this.attackDistance = attackDistance;
+    }
+
     public boolean isDead() {
         return dead;
     }
 
     public void setDead(boolean dead) {
         this.dead = dead;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
     }
 }

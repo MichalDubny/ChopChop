@@ -1,15 +1,9 @@
 package combat;
 
 
-import creatures.Creature;
-import javafx.print.PageLayout;
-import player.Player;
-
 public class Combat<T,P> {
     private CombatEntity attacker;
     private CombatEntity defender;
-    private Player player;
-    private Creature creature;
 
     public<T extends CombatEntity,P extends CombatEntity>  Combat(T attacker, P defender) {
         this.attacker = attacker;
@@ -21,7 +15,7 @@ public class Combat<T,P> {
         int AD = attacker.getAttackDamage();
         int HP = defender.getHealPoints();
         System.out.println( HP + " - " +AD + " = " + (HP-AD) );
-        defender.setHealPoints(defender.getHealPoints() - attacker.getAttackDamage());
+        defender.setHealthPoints(defender.getHealPoints() - attacker.getAttackDamage());
         if(defender.getHealPoints() <= 0 ){
             defender.setDead(true);
         }
