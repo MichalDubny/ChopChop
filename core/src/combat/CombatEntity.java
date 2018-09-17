@@ -11,7 +11,6 @@ public class CombatEntity extends Sprite {
     protected int attackDamage;
     protected float attackDistance;
     protected boolean dead = false;
-    protected boolean attacking = false;
 
 
     public CombatEntity() {
@@ -61,11 +60,4 @@ public class CombatEntity extends Sprite {
         this.dead = dead;
     }
 
-    public boolean isAttacking() {
-        return attacking;
-    }
-
-    public void setAttacking(boolean attacking) {
-        this.attacking = attacking;
-    }
 }

@@ -41,13 +41,21 @@ public class Background extends Sprite{
         this.setPosition(mainCamera.position.x,mainCamera.position.y);
     }
 
-    public Vector2 setPositionBackgroundLastLayer(Player player, float minCameraXPosition , float maxCameraXPosition, OrthographicCamera mainCamera ) {
+    public Vector2 setPositionBackgroundLastLayer(Player player, float minCameraXPosition, float maxCameraXPosition, OrthographicCamera mainCamera) {
         Vector2 vector2 =new Vector2();
         float x;
+        float playerY = player.getBodyYPosition()* GameInfo.PPM + player.getHeight();
 
-        if(player.isJumping()){
-            mainCamera.position.y = (player.getBodyYPosition() )* GameInfo.PPM + player.getHeight() +10 ;
+        if(playerY > GameInfo.HEIGHT/2 ) {
+            mainCamera.position.y = playerY  ;
         }
+
+        x = getXBetweenMaxAndMin(player, minCameraXPosition, maxCameraXPosition, mainCamera);
+        return vector2.set(x , mainCamera.position.y - player.getHeight()*2   );
+    }
+
+    private float getXBetweenMaxAndMin(Player player, float minCameraXPosition, float maxCameraXPosition, OrthographicCamera mainCamera) {
+        float x;
         if(minCameraXPosition  < player.getX() ){
             if(player.getX() < maxCameraXPosition) {
                 mainCamera.position.x = (player.getBodyXPosition()) * GameInfo.PPM;
@@ -59,7 +67,7 @@ public class Background extends Sprite{
         }else {
             x = - 40;
         }
-        return vector2.set(x , mainCamera.position.y - player.getHeight()*2 -20);
+        return x;
     }
 
     public void drawBackground(SpriteBatch batch, Vector2 cameraXPosition) {

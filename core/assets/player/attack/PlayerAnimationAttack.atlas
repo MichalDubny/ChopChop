@@ -1,0 +1,41 @@
+
+PlayerAnimationAttack.png
+size: 1024,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+hero-attack-1
+  rotate: false
+  xy: 2, 2
+  size: 200, 118
+  orig: 200, 118
+  offset: 0, 0
+  index: -1
+hero-attack-2
+  rotate: false
+  xy: 204, 2
+  size: 200, 118
+  orig: 200, 118
+  offset: 0, 0
+  index: -1
+hero-attack-3
+  rotate: false
+  xy: 406, 2
+  size: 200, 118
+  orig: 200, 118
+  offset: 0, 0
+  index: -1
+hero-attack-4
+  rotate: false
+  xy: 608, 2
+  size: 200, 118
+  orig: 200, 118
+  offset: 0, 0
+  index: -1
+hero-attack-5
+  rotate: false
+  xy: 810, 2
+  size: 200, 118
+  orig: 200, 118
+  offset: 0, 0
+  index: -1

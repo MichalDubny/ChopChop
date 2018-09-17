@@ -24,7 +24,7 @@ public class Ghost extends Creature implements Creatures {
     public void setCombatData() {
         setHealthPoints(30);
         setAttackDamage(10);
-        attackDistance = 0.7f;
+        attackDistance = 0.7f*2;
     }
 
     public void setAnimations() {

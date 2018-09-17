@@ -6,6 +6,7 @@ public enum CreatureActivity {
         WALK,
         ATTACK_PREPARE,
         ATTACK,
+        JUMP,
         HURT,
         DEAD,
         RAYSE

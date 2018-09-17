@@ -18,11 +18,11 @@ public class Level1 {
         creaturesTypePoint1.add("Skeleton");
         creaturesTypePoint1.add("Ghost");
         StopPoint stopPoint1 = new StopPoint(world,30,5,3,
-                new Vector2(384,0), creaturesTypePoint1);
+                new Vector2(384*2,0), creaturesTypePoint1);
         spawnPoints = new Array<Vector2>();
-        spawnPoints.add(new Vector2(200,50));
-        spawnPoints.add(new Vector2(350,50));
-        spawnPoints.add(new Vector2(300,50));
+        spawnPoints.add(new Vector2(200*2,50*2));
+        spawnPoints.add(new Vector2(350*2,50*2));
+        spawnPoints.add(new Vector2(300*2,50*2));
         stopPoint1.setSpawnPoints(spawnPoints);
         stopPointArrayData.add(stopPoint1);
     }

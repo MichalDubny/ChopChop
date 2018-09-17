@@ -1,5 +1,6 @@
 package scenes;
 
+import huds.UIHud;
 import scenes.background.Background;
 import scenes.border.EndBorder;
 import scenes.border.StartBorder;
@@ -34,6 +35,7 @@ public class GamePlay implements Screen,ContactListener {
 
     private Box2DDebugRenderer debugRenderer;
 
+    private UIHud uiHud;
     private World world;
     private Level1 level;
     private Background background;
@@ -78,6 +80,8 @@ public class GamePlay implements Screen,ContactListener {
         box2DCamera.position.set( GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f , 0);
 
         debugRenderer = new Box2DDebugRenderer();
+
+        uiHud = new UIHud(game);
         world = new World(new Vector2(0,-9.8f),true);
         world.setContactListener(this);
     }
@@ -92,24 +96,26 @@ public class GamePlay implements Screen,ContactListener {
      * vstupy z klavesnice
      */
     private void handleInput(){
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.movePlayer(player.getPlayerUserData().getLeftMovingLinearImpulse());
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if(!player.isAttacking()) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                player.movePlayer(player.getPlayerUserData().getLeftMovingLinearImpulse());
+                if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                    player.jump();
+                }
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                player.movePlayer(player.getPlayerUserData().getRightMovingLinearImpulse());
+                if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                    player.jump();
+                }
+            } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 player.jump();
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+//                if (!player.isAttacking()) {
+                    player.attack();
+//                }
+            } else {
+                player.setWalking(false);
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.movePlayer(player.getPlayerUserData().getRightMovingLinearImpulse());
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                player.jump();
-            }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.jump();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if(!player.isAttacking()) {
-                player.attack();
-            }
-        } else {
-            player.setWalking(false);
         }
     }
 
@@ -125,12 +131,16 @@ public class GamePlay implements Screen,ContactListener {
         background.drawBackground(game.getBatch(), cameraPosition);
         groundController.drawGrounds(game.getBatch());
         player.drawPlayerAnimation(game.getBatch());
-        creaturesController.update(game.getBatch());
+        creaturesController.draw(game.getBatch());
 
         game.getBatch().end();
 
+        game.getBatch().setProjectionMatrix(uiHud.getStage().getCamera().combined);
+        uiHud.getStage().draw();
+
         game.getBatch().setProjectionMatrix(mainCamera.combined);
         mainCamera.update();
+
         background.updateBackground(mainCamera);
 
         player.update();
@@ -174,7 +184,9 @@ public class GamePlay implements Screen,ContactListener {
             ground.getTexture().dispose();
         }
         player.getTexture().dispose();
+        creaturesController.disposeAllCreatures();
         debugRenderer.dispose();
+        uiHud.getStage().dispose();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package scenes.ground;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -47,6 +48,9 @@ public class GroundController {
         }
     }
 
+    public void update(OrthographicCamera mainCamera) {
+//        this.setPosition(mainCamera.position.x,mainCamera.position.y);
+    }
 }
 
 

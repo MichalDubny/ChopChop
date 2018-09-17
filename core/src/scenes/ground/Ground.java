@@ -26,6 +26,7 @@ public class Ground extends Sprite {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
+//        bodyDef.position.set((getX())/GameInfo.PPM,(getY() /2f)/GameInfo.PPM);
         bodyDef.position.set((getX())/GameInfo.PPM,(getY() /2f)/GameInfo.PPM);
 
         body = world.createBody(bodyDef);
@@ -47,6 +48,8 @@ public class Ground extends Sprite {
 
     public void drawGround(SpriteBatch batch, float x) {
 //        batch.draw(this, this.getX() - this.getWidth() /2f, this.getY() );
+        float y = getY();
+        float h = getHeight();
          batch.draw(this, x  ,0 );
     }
 

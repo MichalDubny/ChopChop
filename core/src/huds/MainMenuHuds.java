@@ -64,7 +64,7 @@ public class MainMenuHuds {
             @Override
             public boolean handle(Event event) {
                 if (event.toString().equals("mouseMoved") && menuPosition != "startGame") {
-                    sign.setPosition(positionMenuX - 20,GameInfo.HEIGHT/2f + 4);
+                    sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f + 4*2);
                     menuPosition = "startGame";
                     return false;
                 }
@@ -81,7 +81,7 @@ public class MainMenuHuds {
             @Override
             public boolean handle(Event event) {
                 if (event.toString().equals("mouseMoved") && menuPosition != "options") {
-                    sign.setPosition(positionMenuX - 20,GameInfo.HEIGHT/2f -10);
+                    sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f -10*2);
                     return false;
                 }
                 return true;
@@ -97,7 +97,7 @@ public class MainMenuHuds {
             @Override
             public boolean handle(Event event) {
                 if (event.toString().equals("mouseMoved") && menuPosition != "credits") {
-                    sign.setPosition(positionMenuX - 20,GameInfo.HEIGHT/2f -26);
+                    sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f -26*2);
                     menuPosition = "credits";
                     return false;
                 }
@@ -115,7 +115,7 @@ public class MainMenuHuds {
             @Override
             public boolean handle(Event event) {
                 if (event.toString().equals("mouseMoved") && menuPosition != "quit") {
-                    sign.setPosition(positionMenuX - 20,GameInfo.HEIGHT/2f -40);
+                    sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f -40*2);
                     menuPosition = "quit";
                     return false;
                 }
@@ -131,15 +131,15 @@ public class MainMenuHuds {
     }
 
     private void setPositionUIElements() {
-        positionMenuX = GameInfo.WIDTH/2f - 40;
+        positionMenuX = GameInfo.WIDTH/2f - 40*2;
 
-        gameNameLabel.setPosition(GameInfo.WIDTH/2f,GameInfo.HEIGHT - 20,Align.top);
-        startGameLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f + 15,Align.left);
+        gameNameLabel.setPosition(GameInfo.WIDTH/2f,GameInfo.HEIGHT - 20*2,Align.top);
+        startGameLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f + 15*2,Align.left);
         optionsLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f,Align.left);
-        creditsLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 15,Align.left);
-        quitLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 30,Align.left);
+        creditsLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 15*2,Align.left);
+        quitLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 30*2,Align.left);
 
-        sign.setPosition(positionMenuX - 20,GameInfo.HEIGHT/2f + 4);
+        sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f + 4*2);
     }
 
     private void setUIElements() {
@@ -161,8 +161,8 @@ public class MainMenuHuds {
         FreeTypeFontGenerator.FreeTypeFontParameter parameterGameName = new FreeTypeFontGenerator.FreeTypeFontParameter();
         FreeTypeFontGenerator.FreeTypeFontParameter parameterMenu = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        parameterGameName.size = 30;
-        parameterMenu.size = 15;
+        parameterGameName.size = 30*2;
+        parameterMenu.size = 15*2;
 
         gameNameFont = generator.generateFont(parameterGameName);
         gameNameMenu = generator.generateFont(parameterMenu);
@@ -181,6 +181,6 @@ public class MainMenuHuds {
 
         Animation<TextureAtlas.AtlasRegion> animation = new Animation<TextureAtlas.AtlasRegion>(frameDuration, signAtlas.getRegions());
         batch.draw(animation.getKeyFrame(elapsedTime, true),
-                sign.getX() - sign.getWidth() / 2f +10, sign.getY() - (sign.getHeight() / 2f -10)  );
+                sign.getX() - sign.getWidth() / 2f +10*2, sign.getY() - (sign.getHeight() / 2f -10*2)  );
     }
 }

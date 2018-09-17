@@ -1,62 +1,34 @@
 
 PlayerAnimationIdle.png
-size: 512,64
+size: 1024,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 hero-idle-1
   rotate: false
   xy: 2, 2
-  size: 100, 59
-  orig: 100, 59
+  size: 200, 118
+  orig: 200, 118
   offset: 0, 0
   index: -1
 hero-idle-2
   rotate: false
-  xy: 2, 2
-  size: 100, 59
-  orig: 100, 59
-  offset: 0, 0
-  index: -1
-hero-idle-8
-  rotate: false
-  xy: 2, 2
-  size: 100, 59
-  orig: 100, 59
+  xy: 204, 2
+  size: 200, 118
+  orig: 200, 118
   offset: 0, 0
   index: -1
 hero-idle-3
   rotate: false
-  xy: 104, 2
-  size: 100, 59
-  orig: 100, 59
-  offset: 0, 0
-  index: -1
-hero-idle-6
-  rotate: false
-  xy: 104, 2
-  size: 100, 59
-  orig: 100, 59
+  xy: 406, 2
+  size: 200, 118
+  orig: 200, 118
   offset: 0, 0
   index: -1
 hero-idle-4
   rotate: false
-  xy: 206, 2
-  size: 100, 59
-  orig: 100, 59
-  offset: 0, 0
-  index: -1
-hero-idle-5
-  rotate: false
-  xy: 206, 2
-  size: 100, 59
-  orig: 100, 59
-  offset: 0, 0
-  index: -1
-hero-idle-7
-  rotate: false
-  xy: 206, 2
-  size: 100, 59
-  orig: 100, 59
+  xy: 406, 2
+  size: 200, 118
+  orig: 200, 118
   offset: 0, 0
   index: -1

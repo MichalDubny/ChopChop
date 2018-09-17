@@ -64,8 +64,10 @@ public class AIArrive<T,P> {
     }
 
     private void startFollower() {
-        character.setMaxLinearSpeed(7);  //7
-        character.setMaxLinearAcceleration(8);  //8
+//        character.setMaxLinearSpeed(7);  //7
+//        character.setMaxLinearAcceleration(8);  //8
+        character.setMaxLinearSpeed(33);  //14
+        character.setMaxLinearAcceleration(35);  //16
     }
 
     private void stopFollower() {
@@ -94,53 +96,10 @@ public class AIArrive<T,P> {
         character.update(GdxAI.getTimepiece().getDeltaTime());
     }
 
-//    private void setBehavior(float deltaTime) {
-////      TODO prerobit aby rozna potvori maly rozne parametre min/max dosah  rychlost utoku
-//        arriveDistance = getDistance(target.getPosition(),character.getPosition());
-//        if(!preparingToAttack) {
-//            if (arriveDistance <= characterCombatEntity.getAttackDistance()*(2f/3f)) {  // dve tretny dosahu utoku
-//                stopFollower();
-//                animationActivity = CreatureActivity.IDLE;
-//                preparingToAttack = true;
-//                preparingToAttackCountDown = new CountDown(200);
-//            } else if (getRest() && !isRest) {
-////              aby jednoty nesli stale rovnakou rychlostou a nenakopili na jednu hromadu
-//                isRest = true;
-//                restCountDown = new CountDown(200);
-//                animationActivity = CreatureActivity.IDLE;
-//                if(restCountDown.isFinish()){
-//                    stopFollower();
-//                    System.out.println("rest");
-//                    isRest = false;
-//                }
-////
-//           } else if (arriveDistance >= 5f) {
-////              max dosah v tomto dosahu uz neprenasleduje nepriatela
-//                stopFollower();
-//                animationActivity = CreatureActivity.IDLE;
-//           } else {
-//                animationActivity = CreatureActivity.WALK;
-//                startFollower();
-//           }
-//        }else {
-//            if (preparingToAttackCountDown.isFinish() && !attacking){
-//                animationActivity = CreatureActivity.ATTACK; // utocna animacia
-//                attackingCountDown = new CountDown(50);
-//                attacking = true;
-//                if (arriveDistance <= characterCombatEntity.getAttackDistance()) {
-//                    System.out.println("damage");
-//                    Combat<Creature, Player> combat = new Combat(characterCombatEntity,targetCombatEntity);
-//                }
-//            }else if(attacking){
-//                if (attackingCountDown.isFinish()){
-//                    preparingToAttack = false;
-//                    System.out.println("end of attack");
-//                    attacking = false;
-//                }
-//            }
-//        }
-//    }
-
+    /**
+     * nastavy pravanie sa potvory
+     * @param deltaTime
+     */
     private void setBehavior(float deltaTime) {
 //      TODO prerobit aby rozna potvori maly rozne parametre min/max dosah  rychlost utoku
         arriveDistance = getDistance(target.getPosition(),character.getPosition());
@@ -155,8 +114,7 @@ public class AIArrive<T,P> {
                 setRestAction();
             }else if(activity == CreatureActivity.REST){
                 setEndRestAction();
-            }else if (arriveDistance >= 5f) {
-//              max dosah v tomto dosahu uz neprenasleduje nepriatela
+            }else if (arriveDistance >= 5f*2f) { //max dosah v tomto dosahu uz neprenasleduje nepriatela
                 stopFollower();
                 activity = animationActivity = CreatureActivity.IDLE;
             } else {
@@ -188,6 +146,7 @@ public class AIArrive<T,P> {
         restCountDown = new CountDown(150);
         stopFollower();
     }
+
 
     private void attackAction() {
         if (preparingToAttackCountDown.isFinish() && activity != CreatureActivity.ATTACK){

@@ -1,6 +1,7 @@
 package player;
 
 import combat.CombatEntity;
+import creatures.CreatureActivity;
 import creatures.aiArrive.Box2dSteeringEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,29 +21,34 @@ public class Player extends CombatEntity {
     private TextureAtlas playerAtlasWalk;
     private TextureAtlas playerAtlasIdle;
     private TextureAtlas playerAtlasJump;
+    private TextureAtlas playerAtlasAttack;
     private float elapsedTime;
     private TextureRegion textureRegion;
 
-    private boolean isJumping;
-    private boolean isWalking;
+    private boolean falling;
+
+    private CreatureActivity activity;
+//    private boolean isWalking;
     private boolean isFaceRight = true;
 
     private CountDown endAttack;
+
 
     public Player(World world) {
         super(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\player\\hero.png"));
         textureRegion = new TextureRegion(new Texture(GameInfo.ASSETS_PREFIX_URL + "\\player\\hero.png"));
 
         this.world = world;
-        setPosition((getWidth() /2f),((getY()+getHeight()/2f)+200));
+        setPosition((getWidth() /2f),((getY()+getHeight()/2f)+88));
         createBody();
         playerAtlasWalk = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\walk\\PlayerAnimationWalk.atlas");
         playerAtlasIdle = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\idle\\PlayerAnimationIdle.atlas");
         playerAtlasJump = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\jump\\PlayerAnimationJump.atlas");
+        playerAtlasAttack = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\attack\\PlayerAnimationAttack.atlas");
         playerUserData = new PlayerData();
         this.healPoints = 100;
         this.attackDamage = 20;
-        this.attackDistance = 20f;  //0.5
+        this.attackDistance = 60f;  //20
     }
 
     private void createBody() {
@@ -58,7 +64,7 @@ public class Player extends CombatEntity {
 
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 70f;
+        fixtureDef.density = 70f;  //70f
         fixtureDef.friction = 2f;
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = GameInfo.PLAYER;
@@ -74,11 +80,11 @@ public class Player extends CombatEntity {
 
     public void movePlayer(Vector2 movingLinearImpulse ){
         setWalking(true);
-        if(!isJumping) {
-            if(body.getLinearVelocity().x >= playerUserData.getMaxVelocity()) {
-                body.setLinearVelocity(playerUserData.getMaxVelocity(),movingLinearImpulse.y);
-            }else if(body.getLinearVelocity().x <= -playerUserData.getMaxVelocity()) {
-                body.setLinearVelocity(-playerUserData.getMaxVelocity(),movingLinearImpulse.y);
+        if(activity != CreatureActivity.JUMP) {
+            if(body.getLinearVelocity().x >= PlayerData.MAX_VELOCITY) {
+                body.setLinearVelocity(PlayerData.MAX_VELOCITY,movingLinearImpulse.y);
+            }else if(body.getLinearVelocity().x <= - PlayerData.MAX_VELOCITY) {
+                body.setLinearVelocity(- PlayerData.MAX_VELOCITY,movingLinearImpulse.y);
             }else {
                 body.applyLinearImpulse(movingLinearImpulse, getBody().getWorldCenter(), true);
             }
@@ -86,18 +92,18 @@ public class Player extends CombatEntity {
     }
 
     public void jump(){
-        if(!isJumping){
+        if(activity != CreatureActivity.JUMP){
             body.applyLinearImpulse(playerUserData.getJumpingLinearImpulse(),getBody().getWorldCenter(),true);
-            isJumping = true;
+            falling = false;
+            activity = CreatureActivity.JUMP;
+//            System.out.println("jump");
         }
     }
 
     public void attack(){
-        setAttacking(true);
+        activity = CreatureActivity.ATTACK;
         createWeapon();
-
         endAttack = new CountDown(100);
-
     }
 
     private void createWeapon() {
@@ -135,26 +141,35 @@ public class Player extends CombatEntity {
         drawPlayerIdle(batch);
         drawPlayerWalk(batch);
         drawPlayerJump(batch);
+        drawPlayerAttack(batch);
     }
 
 
     private void drawPlayerIdle(SpriteBatch batch) {
-        if(!isWalking && !isJumping) {
+        if(activity == CreatureActivity.IDLE) {
             drawAnimation(batch, playerAtlasIdle, 9f);
         }
     }
 
     private void drawPlayerWalk(SpriteBatch batch) {
-        if (isWalking && !isJumping) {
+            if (activity == CreatureActivity.WALK) {
              drawAnimation(batch, playerAtlasWalk, 5f);
         }
     }
 
     private void drawPlayerJump(SpriteBatch batch) {
-        if (isJumping) {
+        if (activity == CreatureActivity.JUMP) {
              drawAnimation(batch, playerAtlasJump, 5f);
         }
     }
+
+
+    private void drawPlayerAttack(SpriteBatch batch) {
+        if (activity == CreatureActivity.ATTACK) {
+            drawAnimation(batch, playerAtlasAttack, 5f);
+        }
+    }
+
 
     private void drawAnimation(SpriteBatch batch, TextureAtlas textureAtlas, float v) {
         float frameDuration = 1f / v;
@@ -167,7 +182,7 @@ public class Player extends CombatEntity {
 
         Animation<TextureAtlas.AtlasRegion> animation = new Animation<TextureAtlas.AtlasRegion>(frameDuration, textureAtlas.getRegions());
         batch.draw(animation.getKeyFrame(elapsedTime, true),
-                GameInfo.metersToPixels(body.getPosition().x)-20 - this.getWidth() / 2f ,
+                GameInfo.metersToPixels(body.getPosition().x)- 20 - this.getWidth() / 2f ,
                 GameInfo.metersToPixels(body.getPosition().y) - (getHeight() / 2f )  );
     }
 
@@ -186,13 +201,21 @@ public class Player extends CombatEntity {
     public void update() {
         float bodyX = ((body.getPosition().x) * GameInfo.PPM);
         setPosition(bodyX,body.getPosition().y * GameInfo.PPM);
-        if(isAttacking()){
+        if(activity == CreatureActivity.ATTACK){
             if(endAttack.isFinish()){
                 System.out.println("player end attack");
                 destroyWeapon();
-                this.attacking = false;
+                activity = CreatureActivity.IDLE;
             }
         }
+        if(activity == CreatureActivity.JUMP){
+//            System.out.println(body.getLinearVelocity().y);
+            if(body.getLinearVelocity().y < 0) {
+                falling = true;
+                body.applyLinearImpulse(playerUserData.getDampingFall(), getBody().getWorldCenter(), true);
+            }
+        }
+
     }
 
     public float getBodyXPosition(){
@@ -204,15 +227,19 @@ public class Player extends CombatEntity {
     }
 
     public void setWalking(boolean walking) {
-        isWalking = walking;
+        if(walking && activity != CreatureActivity.JUMP){
+            activity = CreatureActivity.WALK;
+        }else if(activity != CreatureActivity.JUMP) {
+            activity = CreatureActivity.IDLE;
+        }
     }
 
     public boolean isJumping() {
-        return isJumping;
+        return activity == CreatureActivity.JUMP;
     }
 
     public void landed(){
-        isJumping = false;
+        activity = CreatureActivity.IDLE;
     }
 
     public PlayerData getPlayerUserData() {
@@ -220,4 +247,7 @@ public class Player extends CombatEntity {
     }
 
 
+    public boolean isAttacking() {
+        return activity == CreatureActivity.ATTACK;
+    }
 }
