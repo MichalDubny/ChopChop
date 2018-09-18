@@ -77,12 +77,16 @@ public class CreaturesController {
         }
     }
 
+    public void update(){
+        for (int i = 0; i < creatures.size; i++){
+            creatures.get(i).update();
+        }
+    }
+
     public void draw(SpriteBatch batch) {
         for (Creature creature: creatures){
-            creature.update();
-
+//            creature.update();
             creature.drawAnimation(batch,creature.getArrayAnimations(),creature.getSteeringEntity().getPosition());
-//            creature.getSteeringEntity().draw(batch);
         }
     }
 

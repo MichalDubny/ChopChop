@@ -121,38 +121,47 @@ public class GamePlay implements Screen,ContactListener {
 
     @Override
     public void render(float delta) {
-        update();
+        if (!uiHud.isPause()) {
+            update();
+            background.updateBackground(mainCamera);
+            player.update();
+            creaturesController.update();
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        }
+            game.getBatch().begin();
 
-        game.getBatch().begin();
+            background.drawBackground(game.getBatch(), cameraPosition);
+            groundController.drawGrounds(game.getBatch());
+            player.drawPlayerAnimation(game.getBatch());
+            creaturesController.draw(game.getBatch());
 
-        background.drawBackground(game.getBatch(), cameraPosition);
-        groundController.drawGrounds(game.getBatch());
-        player.drawPlayerAnimation(game.getBatch());
-        creaturesController.draw(game.getBatch());
+            game.getBatch().end();
 
-        game.getBatch().end();
+            game.getBatch().setProjectionMatrix(uiHud.getStage().getCamera().combined);
+            uiHud.getStage().draw();
 
-        game.getBatch().setProjectionMatrix(uiHud.getStage().getCamera().combined);
-        uiHud.getStage().draw();
+            game.getBatch().setProjectionMatrix(mainCamera.combined);
+            mainCamera.update();
 
-        game.getBatch().setProjectionMatrix(mainCamera.combined);
-        mainCamera.update();
+            debugRenderer.render(world, box2DCamera.combined);
 
-        background.updateBackground(mainCamera);
+            world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
-        player.update();
 
-        debugRenderer.render(world,box2DCamera.combined);
-
-        world.step(Gdx.graphics.getDeltaTime(),6,2);
     }
 
     private void update() {
         handleInput();
         cameraPosition = background.setPositionBackgroundLastLayer(player, minCameraXPosition,maxCameraXPosition, mainCamera);
+        changeState();
+    }
+
+    private void changeState() {
+        if (uiHud.isPause()) {
+
+        }
     }
 
 
@@ -163,7 +172,6 @@ public class GamePlay implements Screen,ContactListener {
 
     @Override
     public void pause() {
-
     }
 
     @Override

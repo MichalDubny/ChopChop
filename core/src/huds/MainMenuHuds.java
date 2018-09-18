@@ -64,7 +64,7 @@ public class MainMenuHuds {
             @Override
             public boolean handle(Event event) {
                 if (event.toString().equals("mouseMoved") && menuPosition != "startGame") {
-                    sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f + 4*2);
+                    sign.setPosition(positionMenuX - 40,GameInfo.HEIGHT/2f + 13);
                     menuPosition = "startGame";
                     return false;
                 }
@@ -81,7 +81,7 @@ public class MainMenuHuds {
             @Override
             public boolean handle(Event event) {
                 if (event.toString().equals("mouseMoved") && menuPosition != "options") {
-                    sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f -10*2);
+                    sign.setPosition(positionMenuX - 40,GameInfo.HEIGHT/2f -22);
                     return false;
                 }
                 return true;
@@ -97,7 +97,7 @@ public class MainMenuHuds {
             @Override
             public boolean handle(Event event) {
                 if (event.toString().equals("mouseMoved") && menuPosition != "credits") {
-                    sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f -26*2);
+                    sign.setPosition(positionMenuX - 40,GameInfo.HEIGHT/2f -55);
                     menuPosition = "credits";
                     return false;
                 }
@@ -115,7 +115,7 @@ public class MainMenuHuds {
             @Override
             public boolean handle(Event event) {
                 if (event.toString().equals("mouseMoved") && menuPosition != "quit") {
-                    sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f -40*2);
+                    sign.setPosition(positionMenuX - 40,GameInfo.HEIGHT/2f -92);
                     menuPosition = "quit";
                     return false;
                 }
@@ -131,13 +131,13 @@ public class MainMenuHuds {
     }
 
     private void setPositionUIElements() {
-        positionMenuX = GameInfo.WIDTH/2f - 40*2;
+        positionMenuX = GameInfo.WIDTH/2f - 80;
 
-        gameNameLabel.setPosition(GameInfo.WIDTH/2f,GameInfo.HEIGHT - 20*2,Align.top);
-        startGameLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f + 15*2,Align.left);
+        gameNameLabel.setPosition(GameInfo.WIDTH/2f,GameInfo.HEIGHT - 40,Align.top);
+        startGameLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f + 35,Align.left);
         optionsLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f,Align.left);
-        creditsLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 15*2,Align.left);
-        quitLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 30*2,Align.left);
+        creditsLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 35,Align.left);
+        quitLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 70,Align.left);
 
         sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f + 4*2);
     }
@@ -155,18 +155,13 @@ public class MainMenuHuds {
     }
 
     private void setFontAndColor() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
-                Gdx.files.internal(GameInfo.ASSETS_PREFIX_URL +"\\font\\IMMORTAL.ttf"));
+        FontStyle nameFontStyle = new FontStyle(60);
+        FontStyle menuFontStyle = new FontStyle(30);
 
-        FreeTypeFontGenerator.FreeTypeFontParameter parameterGameName = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        FreeTypeFontGenerator.FreeTypeFontParameter parameterMenu = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        gameNameFont = nameFontStyle.getFont();
+        gameNameMenu = menuFontStyle.getFont();
 
-        parameterGameName.size = 30*2;
-        parameterMenu.size = 15*2;
-
-        gameNameFont = generator.generateFont(parameterGameName);
-        gameNameMenu = generator.generateFont(parameterMenu);
-        orangeColor = new Color(255f/255f,162f/255f,6f/255f, 1);
+        orangeColor = nameFontStyle.getColor();
     }
 
     public Stage getStage() {
@@ -183,4 +178,5 @@ public class MainMenuHuds {
         batch.draw(animation.getKeyFrame(elapsedTime, true),
                 sign.getX() - sign.getWidth() / 2f +10*2, sign.getY() - (sign.getHeight() / 2f -10*2)  );
     }
+
 }
