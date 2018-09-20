@@ -4,7 +4,7 @@ public class GameInfo {
     public static final String ASSETS_PREFIX_URL = "core\\assets\\";
     public static final int WIDTH = 384*2 ;
     public static final int HEIGHT = 224*2 ;
-    public static final int MULTIPLE_SIZE = 2;//4;
+    public static final int MULTIPLE_SIZE = 2; //2;
 
     public static final int PPM = 100;
     public static final int REPEAT_BG = 5;

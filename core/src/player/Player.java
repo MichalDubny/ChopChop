@@ -46,9 +46,10 @@ public class Player extends CombatEntity {
         playerAtlasJump = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\jump\\PlayerAnimationJump.atlas");
         playerAtlasAttack = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\attack\\PlayerAnimationAttack.atlas");
         playerUserData = new PlayerData();
-        this.healPoints = 100;
+        this.healPoints = maxHealPoints = 100;
         this.attackDamage = 20;
         this.attackDistance = 60f;  //20
+
     }
 
     private void createBody() {

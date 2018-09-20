@@ -7,6 +7,7 @@ import creatures.aiArrive.Box2dSteeringEntity;
 public class CombatEntity extends Sprite {
     protected Box2dSteeringEntity steeringEntity;
 
+    protected int maxHealPoints;
     protected int healPoints;
     protected int attackDamage;
     protected float attackDistance;
@@ -24,6 +25,9 @@ public class CombatEntity extends Sprite {
         return steeringEntity;
     }
 
+    public int getMaxHealPoints() {
+        return maxHealPoints;
+    }
 
     public int getHealPoints() {
         return healPoints;

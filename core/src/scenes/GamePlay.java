@@ -44,6 +44,8 @@ public class GamePlay implements Screen,ContactListener {
     private GroundController groundController;
     private Player player;
     private CreaturesController creaturesController;
+    private boolean touchedForTheFirstTime;
+    private boolean pause = true;
 
 
     public GamePlay(GameMain game) {
@@ -121,7 +123,11 @@ public class GamePlay implements Screen,ContactListener {
 
     @Override
     public void render(float delta) {
-        if (!uiHud.isPause()) {
+        checkForFirstTouch();
+
+        cameraPosition = background.setPositionBackgroundLastLayer(player, minCameraXPosition,maxCameraXPosition, mainCamera);
+
+        if (!pause) {
             update();
             background.updateBackground(mainCamera);
             player.update();
@@ -140,7 +146,11 @@ public class GamePlay implements Screen,ContactListener {
             game.getBatch().end();
 
             game.getBatch().setProjectionMatrix(uiHud.getStage().getCamera().combined);
+
+            uiHud.updateLifeBar(player.getMaxHealPoints() ,player.getHealPoints());
             uiHud.getStage().draw();
+
+
 
             game.getBatch().setProjectionMatrix(mainCamera.combined);
             mainCamera.update();
@@ -152,15 +162,26 @@ public class GamePlay implements Screen,ContactListener {
 
     }
 
+    private void checkForFirstTouch() {
+        if(!touchedForTheFirstTime){
+            if(Gdx.input.justTouched() || Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
+                touchedForTheFirstTime = true;
+                pause = false;
+            }
+        }else {
+            changeState();
+        }
+    }
+
     private void update() {
         handleInput();
-        cameraPosition = background.setPositionBackgroundLastLayer(player, minCameraXPosition,maxCameraXPosition, mainCamera);
-        changeState();
     }
 
     private void changeState() {
         if (uiHud.isPause()) {
-
+            pause = true;
+        }else {
+            pause = false;
         }
     }
 
@@ -168,6 +189,7 @@ public class GamePlay implements Screen,ContactListener {
     @Override
     public void resize(int width, int height) {
         gameViewport.update(width,height,true);
+        uiHud.getStage().getViewport().update(width,height,true);
     }
 
     @Override

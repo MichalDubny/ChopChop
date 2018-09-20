@@ -139,7 +139,7 @@ public class MainMenuHuds {
         creditsLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 35,Align.left);
         quitLabel.setPosition(positionMenuX,GameInfo.HEIGHT/2f - 70,Align.left);
 
-        sign.setPosition(positionMenuX - 20*2,GameInfo.HEIGHT/2f + 4*2);
+        sign.setPosition(positionMenuX - 40,GameInfo.HEIGHT/2f + 13);
     }
 
     private void setUIElements() {
@@ -176,7 +176,7 @@ public class MainMenuHuds {
 
         Animation<TextureAtlas.AtlasRegion> animation = new Animation<TextureAtlas.AtlasRegion>(frameDuration, signAtlas.getRegions());
         batch.draw(animation.getKeyFrame(elapsedTime, true),
-                sign.getX() - sign.getWidth() / 2f +10*2, sign.getY() - (sign.getHeight() / 2f -10*2)  );
+                sign.getX() - sign.getWidth() / 2f +20, sign.getY() - (sign.getHeight() / 2f -20)  );
     }
 
 }
