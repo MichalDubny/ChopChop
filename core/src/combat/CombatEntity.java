@@ -2,7 +2,7 @@ package combat;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import creatures.aiArrive.Box2dSteeringEntity;
+import creatures.aiBehavior.Box2dSteeringEntity;
 
 public class CombatEntity extends Sprite {
     protected Box2dSteeringEntity steeringEntity;

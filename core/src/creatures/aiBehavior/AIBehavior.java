@@ -1,4 +1,4 @@
-package creatures.aiArrive;
+package creatures.aiBehavior;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -16,7 +16,7 @@ import utils.CountDown;
 
 import java.util.Random;
 
-public class AIArrive<T,P> {
+public class AIBehavior<T,P> {
     private InputProcessor inputProcessor;
     private Box2dSteeringEntity target;
     private Box2dSteeringEntity character;
@@ -38,8 +38,7 @@ public class AIArrive<T,P> {
     private CombatEntity characterCombatEntity;
 
 
-//    public AIArrive(World world, Box2dSteeringEntity follower, Box2dSteeringEntity target) {
-    public <T extends CombatEntity,P extends CombatEntity> AIArrive (World world, T follower, P target) {
+    public <T extends CombatEntity,P extends CombatEntity> AIBehavior(World world, T follower, P target) {
         this.world = world;
         this.targetCombatEntity = target;
         this.characterCombatEntity = follower;
@@ -64,10 +63,8 @@ public class AIArrive<T,P> {
     }
 
     private void startFollower() {
-//        character.setMaxLinearSpeed(7);  //7
-//        character.setMaxLinearAcceleration(8);  //8
-        character.setMaxLinearSpeed(33);  //14
-        character.setMaxLinearAcceleration(35);  //16
+        character.setMaxLinearSpeed(260);  // 33
+        character.setMaxLinearAcceleration(280);  // 35
     }
 
     private void stopFollower() {
@@ -89,7 +86,7 @@ public class AIArrive<T,P> {
         float deltaTime = GdxAI.getTimepiece().getDeltaTime();
 
 //      Update box2d world
-        world.step(deltaTime, 8, 3);
+//        world.step(deltaTime, 8, 3);
 
         setBehavior(deltaTime);
 
@@ -97,7 +94,7 @@ public class AIArrive<T,P> {
     }
 
     /**
-     * nastavy pravanie sa potvory
+     * nastavy spravanie sa potvory
      * @param deltaTime
      */
     private void setBehavior(float deltaTime) {
@@ -110,7 +107,7 @@ public class AIArrive<T,P> {
                 activity = CreatureActivity.ATTACK_PREPARE;
                 preparingToAttackCountDown = new CountDown(200);
             } else if (getRest() && (activity != CreatureActivity.REST && activity == CreatureActivity.WALK )) {
-//              aby jednoty nesli stale rovnakou rychlostou a nenakopili na jednu hromadu
+//              aby jednotky nesli stale rovnakou rychlostou a nenakopili na jednu hromadu
                 setRestAction();
             }else if(activity == CreatureActivity.REST){
                 setEndRestAction();
@@ -168,7 +165,7 @@ public class AIArrive<T,P> {
      * ako casto bude spomalovat
      */
     private boolean getRest() {
-        return ((new Random().nextInt(250 - 1) + 1) == 1); //25
+        return ((new Random().nextInt(250 - 1) + 1) == 1);
     }
 
 

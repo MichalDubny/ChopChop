@@ -2,7 +2,7 @@ package player;
 
 import combat.CombatEntity;
 import creatures.CreatureActivity;
-import creatures.aiArrive.Box2dSteeringEntity;
+import creatures.aiBehavior.Box2dSteeringEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -46,6 +46,7 @@ public class Player extends CombatEntity {
         playerAtlasJump = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\jump\\PlayerAnimationJump.atlas");
         playerAtlasAttack = new TextureAtlas(GameInfo.ASSETS_PREFIX_URL + "\\player\\attack\\PlayerAnimationAttack.atlas");
         playerUserData = new PlayerData();
+        this.isFaceRight =true;
         this.healPoints = maxHealPoints = 100;
         this.attackDamage = 20;
         this.attackDistance = 60f;  //20
@@ -90,6 +91,7 @@ public class Player extends CombatEntity {
                 body.applyLinearImpulse(movingLinearImpulse, getBody().getWorldCenter(), true);
             }
         }
+        System.out.println(body.getLinearVelocity());
     }
 
     public void jump(){
@@ -102,6 +104,7 @@ public class Player extends CombatEntity {
     }
 
     public void attack(){
+        //TODO  prerobit utok  zasahuje vela nepriatelov je dlhy interval na koliziu. treba dat dalsi interval na animaciu ale nie na utok
         activity = CreatureActivity.ATTACK;
         createWeapon();
         endAttack = new CountDown(100);
@@ -189,12 +192,10 @@ public class Player extends CombatEntity {
 
 
     private void setFlipSide(float x, TextureRegion player) {
-        if (x < 0 && !player.isFlipX()) {
+        if (!isFaceRight && !player.isFlipX()) {
             player.flip(true, false);
-            isFaceRight = false;
-        } else if (x > 0 && player.isFlipX()) {
+        } else if (isFaceRight && player.isFlipX()) {
             player.flip(true, false);
-            isFaceRight = true;
         }
     }
 
@@ -213,7 +214,9 @@ public class Player extends CombatEntity {
 //            System.out.println(body.getLinearVelocity().y);
             if(body.getLinearVelocity().y < 0) {
                 falling = true;
-                body.applyLinearImpulse(playerUserData.getDampingFall(), getBody().getWorldCenter(), true);
+
+                //TODO spomalenie padu sa zasekava vymyslet inac zatial vypnute
+//                body.applyLinearImpulse(playerUserData.getDampingFall(), getBody().getWorldCenter(), true);
             }
         }
 
@@ -250,5 +253,9 @@ public class Player extends CombatEntity {
 
     public boolean isAttacking() {
         return activity == CreatureActivity.ATTACK;
+    }
+
+    public void setFaceRight(boolean faceRight) {
+        isFaceRight = faceRight;
     }
 }

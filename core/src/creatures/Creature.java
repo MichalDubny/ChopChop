@@ -1,8 +1,8 @@
 package creatures;
 
 import combat.CombatEntity;
-import creatures.aiArrive.AIArrive;
-import creatures.aiArrive.Box2dSteeringEntity;
+import creatures.aiBehavior.AIBehavior;
+import creatures.aiBehavior.Box2dSteeringEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -22,7 +22,7 @@ public class Creature extends CombatEntity {
     private Vector2 vector2;
     private TextureRegion textureRegion;
     private Player player;
-    private AIArrive<Creature,Player> aiArrive;
+    private AIBehavior<Creature,Player> aiBehavior;
     private float elapsedTime;
     private CreatureActivity activity;
     private Fixture fixture;
@@ -57,7 +57,7 @@ public class Creature extends CombatEntity {
 
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 4f;
+        fixtureDef.density = 70; //4f
         fixtureDef.friction = 2f;
         fixtureDef.shape = shape;
 
@@ -77,7 +77,7 @@ public class Creature extends CombatEntity {
     }
 
     private void setArrive() {
-        aiArrive = new AIArrive(world, this, player);
+        aiBehavior = new AIBehavior(world, this, player);
     }
 
 
@@ -119,12 +119,12 @@ public class Creature extends CombatEntity {
     }
 
     public void update() {
-        aiArrive.update();
+        aiBehavior.update();
         setActivity();
     }
 
     private void setActivity() {
-        activity = aiArrive.getAnimationActivity();
+        activity = aiBehavior.getAnimationActivity();
     }
 
     public Map<CreatureActivity, AnimationsParameters> getArrayAnimations() {
@@ -147,8 +147,8 @@ public class Creature extends CombatEntity {
         return steeringEntity;
     }
 
-    public AIArrive getAiArrive() {
-        return aiArrive;
+    public AIBehavior getAiBehavior() {
+        return aiBehavior;
     }
 
     public Fixture getFixture() {

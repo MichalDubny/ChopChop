@@ -1,13 +1,10 @@
 package creatures;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import combat.Combat;
-import gameInfo.GameInfo;
-import gameInfo.UserData;
 import gameInfo.UserDataType;
 import level.StopPoint;
 import player.Player;
@@ -79,13 +76,17 @@ public class CreaturesController {
 
     public void update(){
         for (int i = 0; i < creatures.size; i++){
-            creatures.get(i).update();
+            if(creatures.get(i).isDead()){
+                creatures.get(i).getTexture().dispose();
+                creatures.removeIndex(i);
+            }else {
+                creatures.get(i).update();
+            }
         }
     }
 
     public void draw(SpriteBatch batch) {
         for (Creature creature: creatures){
-//            creature.update();
             creature.drawAnimation(batch,creature.getArrayAnimations(),creature.getSteeringEntity().getPosition());
         }
     }

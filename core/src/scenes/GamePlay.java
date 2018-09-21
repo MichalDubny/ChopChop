@@ -86,6 +86,8 @@ public class GamePlay implements Screen,ContactListener {
         uiHud = new UIHud(game);
         world = new World(new Vector2(0,-9.8f),true);
         world.setContactListener(this);
+
+
     }
 
 
@@ -101,11 +103,13 @@ public class GamePlay implements Screen,ContactListener {
         if(!player.isAttacking()) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 player.movePlayer(player.getPlayerUserData().getLeftMovingLinearImpulse());
+                player.setFaceRight(false);
                 if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                     player.jump();
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 player.movePlayer(player.getPlayerUserData().getRightMovingLinearImpulse());
+                player.setFaceRight(true);
                 if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                     player.jump();
                 }
@@ -159,7 +163,7 @@ public class GamePlay implements Screen,ContactListener {
 
             world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
-
+            Gdx.graphics.setTitle("fps: "+Gdx.graphics.getFramesPerSecond());
     }
 
     private void checkForFirstTouch() {

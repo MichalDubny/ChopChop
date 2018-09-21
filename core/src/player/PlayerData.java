@@ -15,7 +15,7 @@ public class PlayerData extends UserData{
     /**
      * maximalna rychlost
      */
-    public static final float MAX_VELOCITY = 2f*4; //2f;
+    public static final float MAX_VELOCITY = 3; //2f;
 
 
     public static final float JUMP_LENGTH = 10f/GameInfo.PPM; //20f;
@@ -28,8 +28,8 @@ public class PlayerData extends UserData{
     public PlayerData(){
         super();
         jumpingLinearImpulse = new Vector2(0, 20f*4 ); //20f
-        rightMovingLinearImpulse = new Vector2(2.05f*4, 0 );  //2.05
-        leftMovingLinearImpulse = new Vector2(-2.05f*4, 0 ); //2.05
+        rightMovingLinearImpulse = new Vector2(8.40f, 0 );  //2.05
+        leftMovingLinearImpulse = new Vector2(-8.40f, 0 ); //2.05
         dampingFall = new Vector2(0,2.7f*4);
         dataType = UserDataType.PLAYER;
     }

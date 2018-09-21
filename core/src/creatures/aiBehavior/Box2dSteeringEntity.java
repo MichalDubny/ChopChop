@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package creatures.aiArrive;
+package creatures.aiBehavior;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.Steerable;
