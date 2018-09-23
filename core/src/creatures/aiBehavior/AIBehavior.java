@@ -25,9 +25,6 @@ public class AIBehavior<T,P> {
     private float arriveDistance;
     private CreatureActivity animationActivity;
     private CreatureActivity activity;
-//    private boolean isRest;
-//    private boolean preparingToAttack = false;
-//    private boolean attacking = false;
 
 
     private CountDown restCountDown;
@@ -84,9 +81,6 @@ public class AIBehavior<T,P> {
 
         GdxAI.getTimepiece().update(Gdx.graphics.getDeltaTime());
         float deltaTime = GdxAI.getTimepiece().getDeltaTime();
-
-//      Update box2d world
-//        world.step(deltaTime, 8, 3);
 
         setBehavior(deltaTime);
 

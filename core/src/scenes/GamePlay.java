@@ -153,7 +153,7 @@ public class GamePlay implements Screen,ContactListener {
 
             uiHud.updateLifeBar(player.getMaxHealPoints() ,player.getHealPoints());
             uiHud.getStage().draw();
-
+            uiHud.gameOver(player.isDead());
 
 
             game.getBatch().setProjectionMatrix(mainCamera.combined);

@@ -91,7 +91,6 @@ public class Player extends CombatEntity {
                 body.applyLinearImpulse(movingLinearImpulse, getBody().getWorldCenter(), true);
             }
         }
-        System.out.println(body.getLinearVelocity());
     }
 
     public void jump(){

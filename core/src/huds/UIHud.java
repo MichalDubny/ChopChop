@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.GameMain;
 import gameInfo.GameInfo;
 import scenes.MainMenu;
+import utils.CountDown;
 
 public class UIHud {
     // TODO prve otvorenie okna sa zobrazi vyssie ako pri zmene velkosti potom sa posunie nizsie treba vyriesit
@@ -35,18 +36,25 @@ public class UIHud {
 
     private FontStyle fontStyle;
     private FontStyle fontStyleLife;
+
     private Label resumeLabel, mainMenuLabel, quitGameLabel;
+    private Label gameOverLabel;
 
     private Label lifeText;
 
 
+    private CountDown gameOverCD;
+
     private boolean pause;
+    private boolean runningGameOverCD;
 
     public UIHud(GameMain game) {
         this.game = game;
 
         gameViewport = new FillViewport(GameInfo.WIDTH,GameInfo.HEIGHT, new OrthographicCamera());
         stage = new Stage(gameViewport, game.getBatch());
+        pausePanel = new Image(new Texture(GameInfo.ASSETS_PREFIX_URL + "background\\pause.png"));
+
         setFontAndColor();
 
         Gdx.input.setInputProcessor(stage);
@@ -57,8 +65,6 @@ public class UIHud {
         stage.addActor(lifePanel);
         stage.addActor(lifeBlock);
         stage.addActor(lifeText);
-//
-//        stage.addActor(lifeTable);
 
     }
 
@@ -101,7 +107,6 @@ public class UIHud {
     }
 
     private void createPausePanel(){
-        pausePanel = new Image(new Texture(GameInfo.ASSETS_PREFIX_URL + "background\\pause.png"));
         pause = true;
 
         resumeLabel = new Label( "Resume",new Label.LabelStyle(fontStyle.getFont(),fontStyle.getColor())) ;
@@ -168,6 +173,28 @@ public class UIHud {
 
     }
 
+    public void gameOver(boolean isDead) {
+        if(isDead){
+            pause = true;
+            gameOverLabel = new Label( "GAME OVER",new Label.LabelStyle(fontStyle.getFont(),fontStyle.getColor()));
+
+            gameOverLabel.setPosition( GameInfo.WIDTH/2f - 80 ,GameInfo.HEIGHT/2f ,Align.left);
+
+            stage.addActor(pausePanel);
+            stage.addActor(gameOverLabel);
+            if(!runningGameOverCD){
+                gameOverCD = new CountDown(800);
+                runningGameOverCD = true;
+            }else {
+                if (gameOverCD.isFinish()){
+                    game.setScreen(new MainMenu(game));
+                    pausePanel.remove();
+                    gameOverLabel.remove();
+                }
+            }
+        }
+    }
+
 
     private void setFontAndColor() {
         fontStyle = new FontStyle(30);
@@ -181,4 +208,7 @@ public class UIHud {
     public void setPause(boolean pause) {
         this.pause = pause;
     }
+
+
+
 }
