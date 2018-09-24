@@ -14,6 +14,7 @@ public class CombatEntity extends Sprite {
     protected boolean dead = false;
 
 
+
     public CombatEntity() {
     }
 

@@ -160,9 +160,9 @@ public class UIHud {
     }
 
     public void updateLifeBar(int maxHealPoints, int healPoints){
+        this.maxHealPoints = maxHealPoints;
+        this.healPoints = healPoints;
         if(healPoints > 0) {
-            this.maxHealPoints = maxHealPoints;
-            this.healPoints = healPoints;
             lifeText.setText(maxHealPoints + "/" + healPoints);
             float percentHeals = healPoints / (maxHealPoints / 100);
             lifeBlock.setWidth(2 * percentHeals);
@@ -187,6 +187,7 @@ public class UIHud {
                 runningGameOverCD = true;
             }else {
                 if (gameOverCD.isFinish()){
+                    stage.dispose();
                     game.setScreen(new MainMenu(game));
                     pausePanel.remove();
                     gameOverLabel.remove();

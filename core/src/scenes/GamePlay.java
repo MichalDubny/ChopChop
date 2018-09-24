@@ -46,6 +46,7 @@ public class GamePlay implements Screen,ContactListener {
     private CreaturesController creaturesController;
     private boolean touchedForTheFirstTime;
     private boolean pause = true;
+    private boolean turnOnDebugger = false;
 
 
     public GamePlay(GameMain game) {
@@ -159,8 +160,9 @@ public class GamePlay implements Screen,ContactListener {
             game.getBatch().setProjectionMatrix(mainCamera.combined);
             mainCamera.update();
 
-            debugRenderer.render(world, box2DCamera.combined);
-
+            if(turnOnDebugger){
+                debugRenderer.render(world, box2DCamera.combined);
+            }
             world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
             Gdx.graphics.setTitle("fps: "+Gdx.graphics.getFramesPerSecond());

@@ -24,14 +24,17 @@ public class Player extends CombatEntity {
     private TextureAtlas playerAtlasAttack;
     private float elapsedTime;
     private TextureRegion textureRegion;
-
-    private boolean falling;
+//
+//    private boolean falling;
 
     private CreatureActivity activity;
 //    private boolean isWalking;
-    private boolean isFaceRight = true;
+    private boolean isFaceRight;
 
-    private CountDown endAttack;
+    private CountDown endAttack,endAnimationAttack;
+
+
+    private boolean weaponBodyExist;
 
 
     public Player(World world) {
@@ -78,6 +81,7 @@ public class Player extends CombatEntity {
         shape.dispose();
 
         steeringEntity = new  Box2dSteeringEntity(textureRegion, body,false, GameInfo.pixelsToMeters((int) getWidth()*2));
+        isFaceRight = true;
     }
 
     public void movePlayer(Vector2 movingLinearImpulse ){
@@ -96,17 +100,18 @@ public class Player extends CombatEntity {
     public void jump(){
         if(activity != CreatureActivity.JUMP){
             body.applyLinearImpulse(playerUserData.getJumpingLinearImpulse(),getBody().getWorldCenter(),true);
-            falling = false;
+//            falling = false;
             activity = CreatureActivity.JUMP;
 //            System.out.println("jump");
         }
     }
 
     public void attack(){
-        //TODO  prerobit utok  zasahuje vela nepriatelov je dlhy interval na koliziu. treba dat dalsi interval na animaciu ale nie na utok
+        //TODO  prerobit utok  zasahuje vela nepriatelov je dlhy interval na koliziu. treba dat dalsi interval na animaciu ale nie na utok.
         activity = CreatureActivity.ATTACK;
         createWeapon();
-        endAttack = new CountDown(100);
+        endAttack = new CountDown(20);  //100
+        endAnimationAttack = new CountDown(100);
     }
 
     private void createWeapon() {
@@ -129,10 +134,14 @@ public class Player extends CombatEntity {
         fixture.setUserData(UserDataType.WEAPON);
 
         shape.dispose();
+        weaponBodyExist = true;
     }
 
     private void destroyWeapon() {
-        world.destroyBody(weaponBody);
+        if(weaponBodyExist) {
+            world.destroyBody(weaponBody);
+            weaponBodyExist = false;
+        }
     }
 
     public Body getBody() {
@@ -203,21 +212,21 @@ public class Player extends CombatEntity {
         float bodyX = ((body.getPosition().x) * GameInfo.PPM);
         setPosition(bodyX,body.getPosition().y * GameInfo.PPM);
         if(activity == CreatureActivity.ATTACK){
-            if(endAttack.isFinish()){
-                System.out.println("player end attack");
+            if(endAttack.isFinish() ){
                 destroyWeapon();
-                activity = CreatureActivity.IDLE;
+                if(endAnimationAttack.isFinish()){
+                    activity = CreatureActivity.IDLE;
+                    System.out.println("player end attack");
+                }
             }
-        }
-        if(activity == CreatureActivity.JUMP){
-//            System.out.println(body.getLinearVelocity().y);
-            if(body.getLinearVelocity().y < 0) {
-                falling = true;
 
-                //TODO spomalenie padu sa zasekava vymyslet inac zatial vypnute
-//                body.applyLinearImpulse(playerUserData.getDampingFall(), getBody().getWorldCenter(), true);
-            }
+
         }
+//        if(activity == CreatureActivity.JUMP){
+//            if(body.getLinearVelocity().y < 0) {
+//                falling = true;
+//            }
+//        }
 
     }
 
