@@ -135,7 +135,7 @@ public class GamePlay implements Screen,ContactListener {
             update();
             background.updateBackground(mainCamera);
             player.update();
-            creaturesController.update();
+            creaturesController.update(level.getStopPointArrayData());
 
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

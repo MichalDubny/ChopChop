@@ -8,6 +8,7 @@ import combat.Combat;
 import gameInfo.UserDataType;
 import level.StopPoint;
 import player.Player;
+import utils.CountDown;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -74,13 +75,47 @@ public class CreaturesController {
         }
     }
 
-    public void update(){
+    public void update(ArrayList<StopPoint> stopPointArrayData){
+        setNewSpawnCreatures(stopPointArrayData);
         for (int i = 0; i < creatures.size; i++){
             if(creatures.get(i).isDead()){
+                world.destroyBody(creatures.get(i).getBody());
                 creatures.get(i).getTexture().dispose();
                 creatures.removeIndex(i);
             }else {
                 creatures.get(i).update();
+            }
+        }
+    }
+
+    /**
+     * v pripade ze hrac prejde cez spawn bod zacnu sa vytvarat nove prisery
+     * @param stopPointArrayData
+     */
+    private void setNewSpawnCreatures(ArrayList<StopPoint> stopPointArrayData) {
+        for (int i = 0; i < stopPointArrayData.size(); i++) {
+            if(stopPointArrayData.get(i).isSpawnRunning()){
+                newSpawnCreatures(stopPointArrayData.get(i));
+
+            }
+        }
+    }
+
+    /**
+     * oitviry sa spamuju v urcitom casom cykle
+     * @param stopPoint
+     */
+    private void newSpawnCreatures(StopPoint stopPoint) {
+        if(creatures.size < stopPoint.getMaxCreaturesInScreen() && creatures.size < stopPoint.getMaxCreatures()){
+            if(!stopPoint.isRunningSpawnCD()){
+                stopPoint.setSpawnCD(new CountDown(500));
+                stopPoint.setRunningSpawnCD(true);
+            }
+            if(stopPoint.getSpawnCD().isFinish()) {
+                System.out.println("spawn creature " + stopPoint.getMaxCreatures());
+                createCreatures(1, stopPoint);
+                stopPoint.setMaxCreatures(stopPoint.getMaxCreatures()-1);
+                stopPoint.setRunningSpawnCD(false);
             }
         }
     }

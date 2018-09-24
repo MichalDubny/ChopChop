@@ -38,7 +38,7 @@ public class Level1 {
      */
     public void turnOnStopPoint() {
         System.out.println("turn On");
-        creatureSpawn();
+
         removeStopPointWall();
     }
 
@@ -46,13 +46,15 @@ public class Level1 {
     public void removeStopPointWall() {
         for (int i = 0; i< stopPointArrayData.size(); i++){
             if(stopPointArrayData.get(i).getFixture().getUserData() == "turnOn"){
+                creatureSpawn(stopPointArrayData.get(i));
                 stopPointArrayData.get(i).setFilterToRemove();
 //                stopPointArrayData.remove(i);
             }
         }
     }
 
-    public void creatureSpawn() {
+    public void creatureSpawn(StopPoint stopPoint) {
+        stopPoint.setSpawnRunning(true);
     }
 
 

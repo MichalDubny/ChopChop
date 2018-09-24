@@ -70,7 +70,7 @@ public class Player extends CombatEntity {
         fixtureDef.friction = 2f;
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = GameInfo.PLAYER;
-        fixtureDef.filter.maskBits = GameInfo.DEFAULT ;
+        fixtureDef.filter.maskBits = GameInfo.DEFAULT | GameInfo.STOP_POINT ;
 
         Fixture fixture = body.createFixture(fixtureDef);
         fixture.setUserData(UserDataType.PLAYER);

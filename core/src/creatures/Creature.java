@@ -154,4 +154,8 @@ public class Creature extends CombatEntity {
     public Fixture getFixture() {
         return fixture;
     }
+
+    public Body getBody() {
+        return body;
+    }
 }
